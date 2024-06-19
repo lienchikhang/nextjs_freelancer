@@ -1,0 +1,61 @@
+footer {
+    @apply mx-8 pt-16;
+    border-top: 1px solid #e4e5e7;
+
+    .footer__responsive {
+        @apply block sm:hidden
+    }
+    
+    .footer__top {
+        
+        @apply  hidden sm:grid sm:grid-cols-9 lg:grid-cols-10 pb-4 gap-10;
+        border-bottom: 1px solid #e4e5e7;
+
+        .footer__item {
+            @apply sm:col-span-3 lg:col-span-2;
+    
+            .item__heading {
+                @apply text-base font-semibold mb-4;
+            }
+    
+            .item__list {
+                li {
+                    @apply mb-3;
+    
+                    p {
+                        color: #74767d;
+                    }
+                }
+            }
+        }
+    }
+
+    .footer__bottom {
+        @apply flex-col md:flex-row py-6 flex items-center justify-between gap-5;
+
+        .left {
+            @apply flex-col md:flex-row flex items-center gap-5;
+
+            svg {
+                @apply mr-4;
+            }
+
+            p {
+                @apply text-sm;
+                color: #74767d;
+            }
+        }
+
+        .right {
+            ul {
+                @apply flex items-center justify-around;
+
+                li {
+                    svg {
+                        @apply mr-6;
+                    }
+                }
+            }
+        }
+    }
+}

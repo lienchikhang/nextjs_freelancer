@@ -1,0 +1,75 @@
+const footers = [
+    {
+        heading: "Categories",
+        child: [
+            "Graphics & Design",
+            "Digital Marketing",
+            "Writing & Translation",
+            "Video & Animation",
+            "Music & Audio",
+            "Fiverr Logo Maker",
+            "Programming & Tech",
+            "Data",
+            "Business",
+            "Lifestyle",
+            "Photography",
+            "End-to-End Projects",
+            "Sitemap",
+        ],
+    },
+    {
+        heading: "About",
+        child: [
+            "Careers",
+            "Press & News",
+            "Partnerships",
+            "Privacy Policy",
+            "Terms of Service",
+            "Intellectual Property Claims",
+            "Investor Relations",
+        ],
+    },
+    {
+        heading: "Support and Education",
+        child: [
+            "Help & Support",
+            "Trust & Safety",
+            "Selling on Fiverr",
+            "Buying on Fiverr",
+            "Fiverr Guides",
+            "        Learn",
+        ],
+    },
+    {
+        heading: "Community",
+        child: [
+            "Community Hub",
+            "Customer Success Stories",
+            "Forum",
+            "Events",
+            "Blog",
+            "Podcast",
+            "Creators",
+            "Invite a Friend",
+            "Become a Seller",
+            "Community Standards",
+            "        Affiliates",
+        ],
+    },
+    {
+        heading: "Business Solutions",
+        child: [
+            "About Business Solutions",
+            "Fiverr Pro",
+            "Fiverr Certified",
+            "Become an Agency",
+            "Fiverr Enterprise",
+            "ClearVoice",
+            "Content Marketing",
+            "Working Not Working",
+            "Contact Sales",
+        ],
+    },
+];
+
+export default footers;

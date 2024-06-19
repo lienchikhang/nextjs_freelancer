@@ -1,0 +1,100 @@
+header {
+
+    @apply fixed top-0 left-0 right-0 py-4 z-50 text-black bg-white;
+
+    border-bottom: 1px solid #e4e5e7;
+
+    div.header__wrapper {
+
+        @apply w-[92%] mx-auto flex justify-between items-center sm:gap-5;
+
+        .header__start {
+            @apply flex items-center gap-1;
+
+            .header__logo {
+                @apply flex w-[90px] items-center cursor-pointer sm:text-center md:text-start;
+
+                svg {
+                    @apply mx-auto sm:mx-0;
+                }
+            }
+
+            .header__menu {
+                @apply inline-block w-auto px-2 sm:px-0 lg:hidden mr-3;
+            }
+        }
+
+
+        .modal__button {
+            @apply text-white bg-black rounded-md px-4 py-3;
+        }
+
+
+        .header__nav {
+            @apply flex items-center w-auto justify-end md:w-auto;
+
+            svg {
+                @apply mr-2 transition-all;
+            }
+
+            .nav__item {
+                @apply hidden lg:block px-3 xl:px-5 py-4;
+
+                a {
+                    @apply font-semibold transition-all;
+
+                }
+
+                &:hover {
+
+                    a,
+                    svg {
+                        color: #5bbc7b;
+                    }
+                }
+
+                &:nth-child(3) {
+                    @apply hidden xl:block;
+                }
+
+
+                &:nth-child(5) {
+                    @apply block px-1 sm:px-2;
+
+                    a {
+                        @apply text-sm md:text-base;
+                    }
+                }
+
+
+                &:last-child {
+                    @apply hidden sm:block bg-transparent rounded-lg py-2 px-4 text-sm;
+                    border: 2px solid #fff;
+                }
+
+                &.scrolled {
+                    border: 2px solid #000;
+                }
+            }
+        }
+    }
+
+    .header__sub {
+
+        @apply flex flex-nowrap;
+
+        div {
+            @apply w-[40%];
+        }
+    }
+
+    &.scrolled {
+        @apply bg-white text-black;
+
+        .header__logo {
+            svg {
+                @apply text-white
+            }
+        }
+    }
+}
