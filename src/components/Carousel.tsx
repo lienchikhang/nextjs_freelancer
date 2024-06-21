@@ -20,7 +20,7 @@ const Carousel = () => {
           <div className="right__search">
             <h1>Find the right freelance service, right away</h1>
             <div className="search__wrapper">
-              <SearchBar />
+              <SearchBar className='active' />
             </div>
           </div>
         </div>

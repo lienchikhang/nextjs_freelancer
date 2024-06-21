@@ -1,9 +1,9 @@
 .searchPage {
-    @apply w-[95%] mx-auto mt-20 rounded-lg py-10;
+    @apply w-[92%] mx-auto mt-20 rounded-lg py-10;
 
     .search__title {
         h2 {
-            @apply text-2xl font-base;
+            @apply text-2xl;
 
             span {
                 @apply font-bold;

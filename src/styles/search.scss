@@ -8,4 +8,8 @@
     .search-btn {
         @apply bg-green-500 text-white px-4 py-2 rounded-e-sm;
     }
+
+    &.active {
+        @apply flex;
+    }
 }

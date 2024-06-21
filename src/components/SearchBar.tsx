@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import "../styles/search.scss";
 
-const SearchBar = () => {
+interface Props {
+    className?: string
+}
+
+const SearchBar: React.FC<Props> = ({ className }) => {
     const [search, setSearch] = useState<string>("");
 
     const handleSearch = (e: React.FormEvent<HTMLInputElement>) => {
@@ -12,7 +16,7 @@ const SearchBar = () => {
     };
 
     return (
-        <div className="search__bar">
+        <div className={`search__bar ${className}`}>
             <input
                 type="text"
                 placeholder="Search for any services..."

@@ -16,10 +16,13 @@
     "@material-ui/types": "^5.1.0",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
+    "@types/react-slick": "^0.23.13",
     "lottie-react": "^2.4.0",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-responsive-carousel": "^3.2.23",
+    "react-slick": "^0.30.2",
     "sass": "^1.77.6",
     "sass-loader": "^14.2.1"
   },

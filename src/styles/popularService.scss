@@ -1,0 +1,23 @@
+.popularService {
+    @apply w-[92%] mx-auto py-20;
+
+    h2 {
+        @apply text-4xl font-semibold mb-12;
+    }
+
+    .service__list {
+        @apply grid grid-cols-12 max-w-full gap-5;
+
+        .service__item {
+            @apply col-span-6 md:col-span-3 lg:col-span-2 flex items-start flex-col justify-between p-1 rounded-2xl;
+
+            h3 {
+                @apply text-white font-semibold text-xl p-4;
+            }
+
+            img {
+                @apply rounded-xl object-cover block;
+            }
+        }
+    }
+}

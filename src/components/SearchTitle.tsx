@@ -8,7 +8,7 @@ const SearchTitle = () => {
   return (
     <section className="search__title">
       <h2>
-        Results for <span>{params.get("name")}</span>
+        Results for <span>{params.get("name") ? params.get("name") : 'All'}</span>
       </h2>
     </section>
   );
