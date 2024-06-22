@@ -3,6 +3,8 @@ import http, { fetching } from "@/libs/http/http";
 import React, { useEffect, useState } from "react";
 import TypeItem from "./TypeItem";
 import { ITypeItem } from "@/libs/interfaces";
+import skes from "@/libs/constants/ske.constants";
+import { Skeleton } from "@mui/material";
 
 const ListType = () => {
   const [data, setData] = useState<ITypeItem[] | null>();
@@ -18,10 +20,11 @@ const ListType = () => {
 
   return (
     <section className="listType">
-      {data &&
+      {data ?
         data.map((type: ITypeItem, idx: number) => {
           return <TypeItem data={type} key={idx} />;
-        })}
+        }) : skes.map((ske, idx: number) => <Skeleton variant="rounded" width={120} height={120} />)
+      }
     </section>
   );
 };
