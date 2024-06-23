@@ -9,6 +9,7 @@ import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigat
 import { Pagination } from '@mui/material';
 import JobListNotFound from './JobListNotFound';
 import ButtonDeliveryTime from './ButtonDeliveryTime';
+import ButtonBudget from './ButtonBudget';
 
 const JobList = () => {
 
@@ -27,7 +28,7 @@ const JobList = () => {
         setPage(value);
     }, [])
 
-    console.log({ searchParams, pathname, query: query.toString() })
+    // console.log({ searchParams, pathname, query: query.toString() })
 
 
     useEffect(() => {
@@ -44,6 +45,7 @@ const JobList = () => {
         <section className='jobList__wrapper'>
             <div className="jobList__filter">
                 <ButtonDeliveryTime />
+                <ButtonBudget />
             </div>
             {
                 (jobs && jobs.length != 0)

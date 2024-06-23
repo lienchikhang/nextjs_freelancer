@@ -2,7 +2,7 @@
     @apply py-6;
 
     .jobList__filter {
-        @apply mb-8;
+        @apply mb-8 flex items-center gap-5;
     }
 
     .jobList__items {

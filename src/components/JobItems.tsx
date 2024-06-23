@@ -7,7 +7,6 @@ interface Props {
 }
 
 const JobItems: React.FC<Props> = ({ data }) => {
-    console.log({ data });
     return (
         <div className="jobList__items">
             {

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
     FormControl,
     FormControlLabel,
@@ -23,13 +23,13 @@ const ButtonDeliveryTime: React.FC<Props> = () => {
     const query = useSearchParams();
     const open = Boolean(anchorEl);
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    const handleClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
-    };
+    }, [])
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setAnchorEl(null);
-    };
+    }, []);
 
     const updateQuery = (key: string, value: string) => {
         const params = new URLSearchParams(query as any);
@@ -39,10 +39,8 @@ const ButtonDeliveryTime: React.FC<Props> = () => {
         } else {
             params.delete(key);
         }
-        // console.log(`search:: ${pathname}?${params.toString()}`)
 
         setFilter(`${pathname}?${params.toString()}` as string);
-
     };
 
     const handleChangeSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,18 +48,15 @@ const ButtonDeliveryTime: React.FC<Props> = () => {
     }
 
     const handleConfirm = () => {
-        // handleFilter(select);
         if (!filter) return;
         router.push(filter);
     }
 
     const handleCancel = () => {
         const params = new URLSearchParams(query as any);
-
         params.delete('deliveryTime');
         setFilter('');
         router.push(`${pathname}?${params.toString()}`);
-
     }
 
     return (
