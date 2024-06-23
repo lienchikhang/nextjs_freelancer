@@ -26,7 +26,7 @@ const JobItem: React.FC<Props> = ({ data }) => {
                 />
             }
             <Link className="jobItem__name" href={{
-                pathname: `/search/${data.job_name}/${data.id}`,
+                pathname: `/${data.job_name}/${data.id}`,
             }}>{data.job_name}</Link>
             <p className="jobItem__star">{data.stars}</p>
             <p className="jobItem__price">
