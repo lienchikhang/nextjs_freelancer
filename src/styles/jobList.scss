@@ -1,0 +1,44 @@
+.jobList__wrapper {
+    @apply py-6;
+
+    .jobList__filter {
+        @apply mb-8;
+    }
+
+    .jobList__items {
+        @apply grid grid-cols-12 gap-5 mb-16;
+
+        .jobItem {
+            @apply col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-3;
+
+
+            .jobItem__image {
+                @apply w-full h-[200px] object-cover rounded-md mb-2;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
+            }
+
+            .jobItem__name {
+                @apply tracking-wider mb-2;
+
+                color: #404145;
+            }
+
+            .jobItem__star {
+                @apply mb-2;
+            }
+        }
+    }
+
+    .jobList__notfound {
+
+        @apply w-1/4 mx-auto flex flex-col justify-center items-center mt-8;
+
+        svg {
+            @apply w-[158px] mb-4;
+        }
+
+        h2 {
+            @apply text-center py-5 text-xl font-semibold;
+        }
+    }
+}

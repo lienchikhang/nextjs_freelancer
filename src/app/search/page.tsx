@@ -8,6 +8,7 @@ import {
 } from "next";
 import React from "react";
 import "../../styles/searchPage.scss";
+import JobList from "@/components/JobList";
 
 export const metadata: Metadata = {
   title: "Freelancer | Save and Secure",
@@ -22,6 +23,7 @@ const SearchPage = () => {
   return (
     <div className="searchPage">
       <SearchTitle />
+      <JobList />
     </div>
   );
 };

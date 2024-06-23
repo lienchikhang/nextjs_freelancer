@@ -1,0 +1,27 @@
+.navbar__btn {
+    @apply rounded-md px-4 py-2 text-black font-bold;
+    border: 1px solid rgb(214, 214, 214);
+}
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation8.MuiPopover-paper.MuiMenu-paper.MuiMenu-paper.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+    @apply p-4 mt-2;
+
+    .input-price {
+        @apply px-4 py-3 rounded-md;
+        border: 1px solid #dadbdd;
+    }
+
+    .btn-section {
+        @apply flex justify-between mt-4 pt-4;
+        border-top: 1px solid #dadbdd;
+
+
+        button {
+            @apply font-bold text-base text-gray-500 gap-5 px-6 py-3 rounded-md;
+
+            &:last-child {
+                @apply text-white bg-black;
+            }
+        }
+    }
+}
