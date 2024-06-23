@@ -35,6 +35,12 @@ const Comments: React.FC<Props> = ({ data, jobId }) => {
         setPage(value);
     }
 
+    if (!data.data.length) {
+        return <div>
+            <h1>Nothing here</h1>
+        </div>
+    }
+
     return (
         <div>
             {

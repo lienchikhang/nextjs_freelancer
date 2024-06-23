@@ -10,10 +10,6 @@ interface Params extends ParsedUrlQuery {
     id: string;
 }
 
-interface Result {
-
-}
-
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
     const { slug } = params;
 
@@ -24,8 +20,6 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 async function fetchingData({ params }: { params: Params }) {
-    const gig = await http.get(`job/get/${params.id}`);
-    const gigComments = await http.get(`comment/get/${params.id}`);
     const result = await Promise.all([
         http.get(`job/get/${params.id}`),
         http.get(`comment/get/${params.id}`),

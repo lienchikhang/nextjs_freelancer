@@ -4,12 +4,18 @@ import CheckIcon from "@mui/icons-material/Check";
 import { useParams } from "next/navigation";
 import { CircularProgress } from "@mui/material";
 import { IService } from '@/libs/interfaces/gig.interface';
+import HireButton from './HireButton';
 
 interface Props {
     data: IService,
+    job: {
+        image: string,
+        name: string,
+    }
 }
 
-const HiredDetail: React.FC<Props> = ({ data }) => {
+const HiredDetail: React.FC<Props> = ({ data, job }) => {
+
     return (
         <div className="hiredDetail__wrapper">
             <div className="hiredDetail__top">
@@ -28,12 +34,7 @@ const HiredDetail: React.FC<Props> = ({ data }) => {
                 </p>
             </div>
             <div className="hiredDetail__bottom">
-                <button
-                //   onClick={handleClick}
-                //   className={`${hasError ? "disabled" : ""}`}
-                >
-                    Continue
-                </button>
+                <HireButton data={data} job={job} />
                 <p>Compare package</p>
             </div>
         </div>
