@@ -17,7 +17,13 @@ interface Props {
 const Gig: React.FC<Props> = ({ data }) => {
     console.log('data in gig', data);
 
-    if (data[0]?.error || data[1]?.error || data[2]?.error) {
+    if (data[0]?.error
+        || data[1]?.error
+        || data[2]?.error
+        || data[0].status == 404
+        || data[1].status == 404
+        || data[2].status == 404
+    ) {
         return <div className="gig__wrapper">
             <h1>Something is wrong!</h1>
         </div>
@@ -89,6 +95,7 @@ const Gig: React.FC<Props> = ({ data }) => {
                                         <HiredDetail data={service} job={{
                                             image: data[0]?.content.job_image,
                                             name: data[0]?.content?.job_name,
+                                            jobId: data[0]?.content.id,
                                         }} />
                                     </TabPanel>
                                 })

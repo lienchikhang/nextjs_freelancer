@@ -37,6 +37,10 @@ header {
                 @apply mr-2 transition-all;
             }
 
+            .nav__login {
+                @apply flex items-center gap-4;
+            }
+
             .nav__item {
                 @apply hidden lg:block px-3 xl:px-5 py-4;
 

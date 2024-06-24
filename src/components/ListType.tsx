@@ -23,7 +23,7 @@ const ListType = () => {
       {data ?
         data.map((type: ITypeItem, idx: number) => {
           return <TypeItem data={type} key={idx} />;
-        }) : skes.map((ske, idx: number) => <Skeleton variant="rounded" width={120} height={120} />)
+        }) : skes.map((ske, idx: number) => <Skeleton key={idx} variant="rounded" width={120} height={120} />)
       }
     </section>
   );

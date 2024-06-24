@@ -6,9 +6,29 @@ const http = {
             method: 'GET',
             credentials: "include",
         })
+            .then((res) => {
+                console.log('res in http', res);
+                return res.json()
+            })
+            .catch((err) => {
+                console.log('error in http:: ', err);
+                return {
+                    data: null,
+                    error: true,
+                }
+            })
+    },
+
+    post(route: string, body: any) {
+        console.log('body', body);
+        return fetch(`http://localhost:8080/${route}`, {
+            method: 'POST',
+            credentials: "include",
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' },
+            body: JSON.stringify(body),
+        })
             .then((res) => res.json())
             .catch((err) => {
-                // console.log('error in http:: ', err);
                 return {
                     data: null,
                     error: true,
@@ -17,12 +37,4 @@ const http = {
     }
 }
 
-export const fetching = async (route: string, method: string, data?: any) => {
-    switch (method.toUpperCase()) {
-        case 'GET': {
-            const rs = await http.get(route);
-            return rs;
-        }
-    }
-}
 export default http;

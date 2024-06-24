@@ -4,12 +4,20 @@ import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } fr
 import { Logout, Settings } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import { IStateUser } from '@/libs/interfaces/state.interface';
+
+interface IState {
+    user: {
+        full_name: string,
+        avatar: string,
+    }
+}
 
 const Navbar: React.FC = () => {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [fullname, setFullname] = useState<string | null>(null);
-    const [avatar, setAvatar] = useState<string | null>(null);
+    const selector = useSelector<IState>(state => state.user) as IStateUser;
     const router = useRouter();
     const open = Boolean(anchorEl);
 
@@ -36,12 +44,29 @@ const Navbar: React.FC = () => {
             <li className="nav__item">
                 <Link href={'#'}>Become a seller</Link>
             </li>
-            <li className="nav__item">
-                <Link href={'#'}>Sign in</Link>
-            </li>
-            <li className={`nav__item scrolled`}>
-                <Link href={'#'}>Join</Link>
-            </li>
+            {
+                selector?.full_name ?
+                    <div className='nav__login'>
+                        {
+                            selector?.avatar ? <Link href={'#'}>
+                                <Avatar src={selector?.avatar} />
+                            </Link> :
+                                <Link href={'#'}>
+                                    <Avatar>{selector?.full_name[0]?.toUpperCase()}</Avatar>
+                                </Link>
+                        }
+                        <Link href={'#'}>{selector?.full_name}</Link>
+                    </div> :
+                    <React.Fragment>
+                        <li className="nav__item">
+                            <Link href={'#'}>Sign in</Link>
+                        </li>
+                        <li className={`nav__item`} >
+                            <Link href={'#'}>Joib</Link>
+                        </li>
+                    </React.Fragment>
+            }
+
         </ul>
     )
 }

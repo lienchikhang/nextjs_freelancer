@@ -1,0 +1,124 @@
+.payment__wrapper {
+    @apply w-[92%] mx-auto pb-20 pt-28 grid grid-cols-12 gap-20;
+
+    .payment__left {
+        @apply col-span-8;
+
+        .left__wrapper {
+            @apply flex flex-col justify-center gap-8;
+
+
+            .infomation {
+                @apply flex flex-col justify-center border rounded-md;
+
+                .info__heading {
+                    @apply px-4 py-4 border-b;
+                    background-color: #fafafa;
+
+                    h2 {
+                        @apply text-base font-semibold;
+                    }
+                }
+
+                .info__body {
+                    @apply px-4 py-4;
+
+                    div {
+                        @apply flex justify-between items-center mb-4;
+
+                        p {
+                            @apply text-gray-500 text-base;
+                        }
+
+                        button {
+                            @apply px-6 py-2 font-semibold rounded-md border border-black;
+                        }
+                    }
+                }
+            }
+
+            .options {
+                @apply flex flex-col justify-center border rounded-md;
+
+                .option__heading {
+                    @apply p-4 border-b;
+                    background-color: #fafafa;
+
+                    h2 {
+                        @apply text-base font-semibold;
+                    }
+                }
+
+                .option__body {
+                    @apply px-4 py-6;
+
+                    .option__item {
+                        box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+                    }
+                }
+            }
+        }
+
+    }
+
+    .payment__right {
+        @apply col-span-4 border rounded-md;
+
+        .infomation {
+            @apply px-6 py-4 border-b;
+            background-color: #fafafa;
+
+            .infomation__top {
+
+                @apply flex gap-5 mb-8 items-center text-base;
+
+
+                img {
+                    @apply block w-[40%] h-[50px] object-cover;
+                }
+
+                p {
+                    @apply w-[60%] font-semibold;
+                }
+            }
+
+            .infomation__bottom {
+
+                @apply flex gap-5 mb-4 items-center justify-between text-base;
+
+                p.type {
+                    @apply w-[60%] font-semibold;
+                }
+            }
+
+        }
+
+        .checkout {
+            @apply px-6 py-4;
+
+            div {
+                @apply flex items-center justify-between mb-4;
+
+                p.checkout__total {
+                    @apply font-semibold;
+                }
+
+                &.service {
+                    @apply py-4 border-b;
+                }
+            }
+
+            button {
+                @apply w-full px-8 py-3 text-white bg-black font-semibold rounded-md cursor-pointer;
+
+                &.disable {
+                    background-color: #fafafa;
+                }
+
+                &.done {
+                    @apply bg-green-500/75 cursor-not-allowed;
+                }
+            }
+        }
+    }
+}

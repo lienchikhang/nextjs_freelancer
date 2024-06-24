@@ -11,6 +11,7 @@ interface Props {
     job: {
         image: string,
         name: string,
+        jobId: number,
     }
 }
 

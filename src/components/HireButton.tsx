@@ -10,6 +10,7 @@ interface Props {
     job: {
         image: string,
         name: string,
+        jobId: number,
     }
 }
 
@@ -18,14 +19,18 @@ const HireButton: React.FC<Props> = ({ data, job }) => {
     const dispatch = useDispatch();
 
     const handleClick = () => {
+
+        const payload = {
+            id: data.id,
+            price: data.price,
+            name: job.name,
+            image: job.image,
+            level: data.service_level,
+            jobId: job.jobId,
+        }
+        console.log('payload in hirebutton', payload);
         dispatch(
-            setOrder({
-                id: data.id,
-                price: data.price,
-                name: job.name,
-                image: job.image,
-                level: data.service_level,
-            })
+            setOrder(payload)
         )
 
         dispatch(

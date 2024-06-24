@@ -6,6 +6,8 @@ interface IInitialState {
     name: string,
     image: string,
     level: string,
+    method: string,
+    jobId: number,
 }
 
 const orderSlice = createSlice({
@@ -15,6 +17,9 @@ const orderSlice = createSlice({
         price: 0,
         name: '',
         image: '',
+        level: '',
+        method: '',
+        jobId: 0,
     } as IInitialState,
     reducers: {
         setOrder(state, action) {
@@ -23,9 +28,14 @@ const orderSlice = createSlice({
             state.image = action.payload.image;
             state.price = action.payload.price;
             state.level = action.payload.level;
+            state.jobId = action.payload.jobId;
+        },
+
+        updateMethod(state, action) {
+            state.method = action.payload
         }
     }
 });
 
-export const { setOrder } = orderSlice.actions;
+export const { setOrder, updateMethod } = orderSlice.actions;
 export default orderSlice.reducer;
