@@ -10,21 +10,42 @@ interface Props {
 const JobItem: React.FC<Props> = ({ data }) => {
     return (
         <div className='jobItem'>
-            {
-                data.job_image ? <Image
-                    className="jobItem__image"
-                    src={data.job_image}
-                    alt={data.job_name}
-                    width={200}
-                    height={150}
-                /> : <Image
-                    className="jobItem__image"
-                    src={'/images/notfound.jpeg'}
-                    alt={data.job_name}
-                    width={200}
-                    height={150}
-                />
-            }
+            <Link className="jobItem__image-wrapper" href={{
+                pathname: `/${data.job_name}/${data.id}`,
+            }}>
+                {
+                    data.job_image ? <Image
+                        className="jobItem__image"
+                        src={data.job_image}
+                        alt={data.job_name}
+                        width={200}
+                        height={150}
+                    /> : <Image
+                        className="jobItem__image"
+                        src={'/images/notfound.jpeg'}
+                        alt={data.job_name}
+                        width={200}
+                        height={150}
+                    />
+                }
+            </Link>
+            {/* <div className='jobItem__image-wrapper'>
+                {
+                    data.job_image ? <Image
+                        className="jobItem__image"
+                        src={data.job_image}
+                        alt={data.job_name}
+                        width={200}
+                        height={150}
+                    /> : <Image
+                        className="jobItem__image"
+                        src={'/images/notfound.jpeg'}
+                        alt={data.job_name}
+                        width={200}
+                        height={150}
+                    />
+                }
+            </div> */}
             <Link className="jobItem__name" href={{
                 pathname: `/${data.job_name}/${data.id}`,
             }}>{data.job_name}</Link>

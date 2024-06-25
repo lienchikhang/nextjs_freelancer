@@ -230,9 +230,13 @@
 
                     .hiredDetail__bottom {
                         button {
-                            @apply w-full text-white font-bold bg-black rounded-md px-4 py-2;
+                            @apply w-full text-white font-bold bg-black rounded-md px-4 py-2 transition-all;
                             // background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
                             // text-shadow: 0px 0px 4px black;
+
+                            &:hover {
+                                @apply bg-black/80;
+                            }
 
                             &.disabled {
                                 @apply bg-gray-200 cursor-wait text-gray-800;
@@ -356,7 +360,12 @@
         @apply absolute bottom-0 left-0 w-full py-5 px-6 border-t border-gray-500 bg-white;
 
         .btn {
-            @apply w-full bg-black rounded-sm px-8 py-3 mb-2 text-white font-semibold;
+            @apply w-full bg-black rounded-sm px-8 py-3 mb-2 text-white font-semibold transition-all;
+
+            &:hover {
+                @apply bg-black/80;
+            }
+
         }
 
         p {

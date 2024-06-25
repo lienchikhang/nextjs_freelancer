@@ -48,7 +48,7 @@ const LoginSection: React.FC<Props> = () => {
             localStorage.setItem('root::user', JSON.stringify(userData));
             login(userData);
 
-            await fetch(`/auth`, {
+            await fetch(`/api/auth`, {
                 method: 'POST',
                 credentials: "include",
                 headers: { 'Content-Type': 'application/json' },

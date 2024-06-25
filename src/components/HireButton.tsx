@@ -2,7 +2,7 @@
 import { useDrawer } from '@/libs/contexts/drawerConfirm.context';
 import { useOrder } from '@/libs/contexts/order.context';
 import { IService } from '@/libs/interfaces/gig.interface';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Props {
     data: IService,
@@ -32,12 +32,11 @@ const HireButton: React.FC<Props> = ({ data, job }) => {
 
         createOrder(payload)
         toggleDrawer(true);
+
     }
 
     return (
-        <button
-            onClick={handleClick}
-        >
+        <button onClick={handleClick}>
             Continue
         </button>
     )

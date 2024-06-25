@@ -4,7 +4,7 @@
 }
 
 .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation8.MuiPopover-paper.MuiMenu-paper.MuiMenu-paper.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
-    @apply p-4 mt-2;
+    @apply max-w-[250px] p-4 mt-2;
 
     .input-price {
         @apply px-4 py-3 rounded-md;
@@ -17,11 +17,22 @@
 
 
         button {
-            @apply font-bold text-base text-gray-500 gap-5 px-6 py-3 rounded-md;
+            @apply font-bold text-base text-gray-500 gap-5 px-6 py-3 rounded-md transition-all;
+
+            &:first-child {
+                &:hover {
+                    @apply bg-zinc-100;
+                }
+            }
 
             &:last-child {
                 @apply text-white bg-black;
+
+                &:hover {
+                    @apply bg-black/75;
+                }
             }
+
         }
     }
 }

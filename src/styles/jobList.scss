@@ -9,11 +9,14 @@
         @apply grid grid-cols-12 gap-5 mb-16;
 
         .jobItem {
-            @apply col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-3;
+            @apply col-span-12 sm:col-span-6 rounded-md md:col-span-4 xl:col-span-3 cursor-pointer overflow-hidden;
 
+            .jobItem__image-wrapper {
+                @apply block h-[200px] overflow-hidden rounded-md mb-2;
+            }
 
             .jobItem__image {
-                @apply w-full h-[200px] object-cover rounded-md mb-2;
+                @apply block w-full h-full object-cover rounded-md scale-100 transition-all;
                 box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
             }
 
@@ -25,6 +28,13 @@
 
             .jobItem__star {
                 @apply mb-2;
+            }
+
+            &:hover {
+
+                .jobItem__image {
+                    @apply scale-125;
+                }
             }
         }
     }

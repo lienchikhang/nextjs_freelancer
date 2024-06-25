@@ -14,6 +14,8 @@ export async function POST(req: Request) {
         });
     }
 
+    cookies().set('token', payload.token);
+
     return Response.json(payload, {
         status: 200,
         headers: {

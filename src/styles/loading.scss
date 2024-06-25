@@ -1,0 +1,9 @@
+.loading__wrapper {
+    @apply w-screen h-screen relative mx-auto py-28 bg-green-400/55;
+
+    .loading__section {
+        h1 {
+            @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-semibold text-white;
+        }
+    }
+}
