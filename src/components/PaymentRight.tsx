@@ -9,9 +9,11 @@ import { PAYMENT } from '@/libs/enums/payment.enum';
 import { Payment, Balance, VNPay } from '@/libs/classes/Payment';
 import { setUser } from '@/libs/reduxStore/user.slice';
 import { toggleModal } from '@/libs/reduxStore/authModal.slice';
-import { IStateOrder } from '@/libs/interfaces/state.interface';
+import { IStateOrder, IStateUser } from '@/libs/interfaces/state.interface';
 import http from '@/libs/http/http';
 import { updateMethod } from '@/libs/reduxStore/order.slice';
+import { useUser } from '@/libs/contexts/user.context';
+import { useOrder } from '@/libs/contexts/order.context';
 
 
 interface Props {
@@ -27,21 +29,32 @@ interface IState {
         method: string,
         jobId: number,
     },
+    user: {
+        full_name: string,
+        avatar: string | null,
+        email: string,
+    }
 }
 
 const PaymentRight: React.FC<Props> = ({ }) => {
-
-    const selector = useSelector<IState>(state => state.order) as IStateOrder;
     const [isPaid, setIsPaid] = useState(false);
+    const { user, logout } = useUser();
+    const { order, createOrder } = useOrder();
     const dispatch = useDispatch();
     const router = useRouter();
 
+    useEffect(() => {
+        const local = localStorage.getItem('order');
+        if (local) {
+            const payload = JSON.parse(local);
+            createOrder(payload);
+        }
+    }, [])
+
     const handleConfirm = async () => {
-        if (!selector.id || !selector.method) return;
-
+        if (!order) return;
         if (isPaid) return;
-
-        if (!Cookies.get('token')) {
+        if (!user) {
             console.log('not login')
             dispatch(
                 toggleModal(true)
@@ -51,7 +64,7 @@ const PaymentRight: React.FC<Props> = ({ }) => {
 
         const payment = new Payment(new Balance());
 
-        if (selector.method.toUpperCase() == PAYMENT.VNPAY) {
+        if (order.method.toUpperCase() == PAYMENT.VNPAY) {
             payment.setStrategy(new VNPay());
             dispatch(
                 updateMethod(PAYMENT.VNPAY)
@@ -60,25 +73,15 @@ const PaymentRight: React.FC<Props> = ({ }) => {
 
         //make payment
         const rs = await payment.make({
-            serviceId: selector.id,
-            method: selector.method,
-            name: selector.name,
-            jobId: selector.jobId,
-        }, selector.price)
+            serviceId: order.id,
+            method: order.method,
+            name: order.name,
+            jobId: order.jobId,
+            email: user.email,
+        }, order.price)
 
         if (rs.status == 401) {
-            dispatch(
-                setUser({
-                    full_name: '',
-                    avatar: ''
-                })
-            );
-
-            Cookies.remove('full_name');
-            Cookies.remove('avatar');
-            Cookies.remove('token');
-
-            window.location.reload();
+            logout();
         }
 
         //go back to home
@@ -87,20 +90,24 @@ const PaymentRight: React.FC<Props> = ({ }) => {
         }
     }
 
+    if (!order) {
+        return <h1>Oops! There is something wrong here. Please try again!</h1>
+    }
+
     return (
         <div className='payment__right'>
             <div className="infomation">
                 <div className='infomation__top'>
-                    {selector?.image ?
-                        <Image src={selector?.image} alt={selector?.name} width={50} height={50} /> :
+                    {order?.image ?
+                        <Image src={order?.image} alt={order?.name} width={50} height={50} /> :
                         <Image src={'/images/notfound.jpeg'} alt="notfound" width={50} height={50} />
                     }
-                    {selector?.name && <p>{selector?.name.replaceAll('-', ' ')}</p>}
+                    {order?.name && <p>{order?.name.replaceAll('-', ' ')}</p>}
                 </div>
                 <div className='infomation__bottom'>
-                    {selector?.level && <p className='type'>{selector?.level}</p>}
+                    {order?.level && <p className='type'>{order?.level}</p>}
                     <div className='price'>
-                        {selector ? <p>{selector?.price.toLocaleString()}</p> : <p>x.xxx.xxx</p>}
+                        {order ? <p>{order?.price.toLocaleString()}</p> : <p>x.xxx.xxx</p>}
                     </div>
                 </div>
             </div>
@@ -111,9 +118,9 @@ const PaymentRight: React.FC<Props> = ({ }) => {
                 </div>
                 <div className='total'>
                     <p className='checkout__total'>Total</p>
-                    {selector ? <p>{(selector?.price).toLocaleString()}</p> : <p>x.xxx.xxx</p>}
+                    {order ? <p>{(order?.price).toLocaleString()}</p> : <p>x.xxx.xxx</p>}
                 </div>
-                <button className={`${selector ? 'active' : 'disable'} ${isPaid ? 'done' : ''}`} onClick={handleConfirm}>{isPaid ? 'Thank you' : 'Confirm & Pay'}</button>
+                <button className={`${order ? 'active' : 'disable'} ${isPaid ? 'done' : ''}`} onClick={handleConfirm}>{isPaid ? 'Thank you' : 'Confirm & Pay'}</button>
             </div>
         </div>
     )

@@ -5,9 +5,9 @@ import userSlice from './user.slice';
 import authModalSlice from './authModal.slice';
 const store = configureStore({
     reducer: combineReducers({
-        order: orderSlice,
-        drawer: drawerSlide,
-        user: userSlice,
+        // order: orderSlice,
+        // drawer: drawerSlide,
+        // user: userSlice,
         modal: authModalSlice,
     }),
 });

@@ -9,10 +9,7 @@ import { IS_EMAIL } from "@/libs/constants/check.constants";
 import { User } from "@/libs/interfaces/user.interface";
 import { useUser } from "@/libs/contexts/user.context";
 
-interface Props {
-    updateState: (number: number) => void;
-    closeModal: () => void;
-}
+interface Props { }
 
 interface FormValues {
     email: string;
@@ -26,7 +23,7 @@ const validateEmail = (value: string) => {
     return true;
 };
 
-const ModalStateLogin: React.FC<Props> = ({ updateState, closeModal }) => {
+const LoginSection: React.FC<Props> = () => {
     const { login } = useUser();
     const {
         register,
@@ -46,9 +43,9 @@ const ModalStateLogin: React.FC<Props> = ({ updateState, closeModal }) => {
                 name: rs.content.user.full_name,
                 avatar: rs.content.user.avatar,
                 email: rs.content.user.email,
-                token: rs.content.token,
             };
 
+            localStorage.setItem('root::user', JSON.stringify(userData));
             login(userData);
 
             await fetch(`/auth`, {
@@ -58,8 +55,6 @@ const ModalStateLogin: React.FC<Props> = ({ updateState, closeModal }) => {
                 body: JSON.stringify(rs.content),
             })
         }
-
-        closeModal();
     };
 
     useEffect(() => {
@@ -67,11 +62,7 @@ const ModalStateLogin: React.FC<Props> = ({ updateState, closeModal }) => {
     }, []);
 
     return (
-        <div>
-            <button onClick={() => updateState(-1)} className="btn-back">
-                <ArrowBackIcon />
-                Back
-            </button>
+        <div className="login__wrapper">
             <h1>Continue with your email or username</h1>
             <div className="form__wrapper">
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
@@ -140,4 +131,4 @@ const ModalStateLogin: React.FC<Props> = ({ updateState, closeModal }) => {
     );
 };
 
-export default ModalStateLogin;
+export default LoginSection;

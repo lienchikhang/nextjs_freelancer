@@ -91,7 +91,7 @@ const Gig: React.FC<Props> = ({ data }) => {
                             {
                                 data[2]?.status == 200 && data[2]?.content &&
                                 data[2]?.content.map((service: IService, idx: number) => {
-                                    return <TabPanel className="bottom__item">
+                                    return <TabPanel key={idx} className="bottom__item">
                                         <HiredDetail data={service} job={{
                                             image: data[0]?.content.job_image,
                                             name: data[0]?.content?.job_name,

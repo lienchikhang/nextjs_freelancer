@@ -20,4 +20,5 @@ export interface IStateModal {
 export interface IStateUser {
     full_name: string,
     avatar: string,
+    email: string,
 }

@@ -4,6 +4,7 @@ export async function POST(req: Request) {
 
     const payload = await new Response(req.body).json();
 
+    console.log('payload in api rout', payload);
 
     if (!payload.token || !payload.user) {
         return Response.json({
@@ -12,9 +13,6 @@ export async function POST(req: Request) {
             status: 400,
         });
     }
-
-    cookies().set('full_name', payload.user.full_name);
-    cookies().set('avatar', payload.user.avatar);
 
     return Response.json(payload, {
         status: 200,

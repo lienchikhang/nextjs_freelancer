@@ -7,29 +7,9 @@ import Logo from './Logo';
 import SearchBar from './SearchBar';
 import '../styles/header.scss';
 import Navbar from './Navbar';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@/libs/reduxStore/user.slice';
 
-interface Props {
-    initialUser?: {
-        full_name?: string,
-        avatar?: string | null,
-    },
-}
 
-const Header: React.FC<Props> = ({ initialUser }) => {
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(
-            setUser({
-                full_name: initialUser?.full_name,
-                avatar: initialUser?.avatar,
-            })
-        )
-    }, [initialUser])
-
+const Header: React.FC = () => {
     const router = usePathname();
     const [isOpen, setIsOpen] = useState(false);
     const [showNavbar, setShowNavbar] = useState(false);

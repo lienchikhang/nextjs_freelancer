@@ -4,51 +4,29 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { setOrder, updateMethod } from '@/libs/reduxStore/order.slice';
 import { useDispatch } from 'react-redux';
+import { useOrder } from '@/libs/contexts/order.context';
 
 interface Plan {
     name: string;
-    ram: string;
-    cpus: string;
-    disk: string;
+    first: string;
+    second: string;
+    third: string;
 }
 
 const plans = [
-    { name: 'Balance', ram: '12GB', cpus: '6 CPUs', disk: '256GB SSD disk' },
-    { name: 'VNPay', ram: '16GB', cpus: '8 CPUs', disk: '512GB SSD disk' },
+    { name: 'Balance', first: 'Account', second: '', third: '' },
+    { name: 'VNPay', first: 'NCB', second: 'JCB', third: 'EXIMBANK' },
 ]
 
 const PaymentLeft = () => {
 
     let [selected, setSelected] = useState<Plan>(plans[0]);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        const local = localStorage.getItem('order');
-        if (local) {
-            const orderPayload = JSON.parse(local);
-            dispatch(
-                setOrder({
-                    id: orderPayload.id,
-                    price: orderPayload.price,
-                    name: orderPayload.name,
-                    image: orderPayload.image,
-                    level: orderPayload.service_level,
-                    jobId: orderPayload.jobId,
-                    method: orderPayload.method,
-                })
-            )
-            dispatch(
-                updateMethod(plans[0].name.toUpperCase())
-            )
-        }
-    }, [])
+    // const dispatch = useDispatch();
+    const { updateMethod } = useOrder();
 
     const handleChangePlan = (value: Plan) => {
-        console.log('selected', value);
         setSelected(value);
-        dispatch(
-            updateMethod(value.name.toUpperCase())
-        )
+        updateMethod(value.name);
     }
 
     return (
@@ -82,11 +60,11 @@ const PaymentLeft = () => {
                                             <div className="text-sm/6">
                                                 <p className="font-semibold text-black">{plan.name}</p>
                                                 <div className="flex gap-2 text-black/50">
-                                                    <div>{plan.ram}</div>
+                                                    <div>{plan.first}</div>
                                                     <div aria-hidden="true">&middot;</div>
-                                                    <div>{plan.cpus}</div>
+                                                    <div>{plan.second}</div>
                                                     <div aria-hidden="true">&middot;</div>
-                                                    <div>{plan.disk}</div>
+                                                    <div>{plan.third}</div>
                                                 </div>
                                             </div>
                                             <CheckCircleIcon className="size-6 fill-black opacity-0 transition group-data-[checked]:opacity-100" />

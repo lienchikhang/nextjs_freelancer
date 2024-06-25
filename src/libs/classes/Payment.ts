@@ -27,6 +27,7 @@ interface IPayment {
     method: string,
     name: string,
     jobId: number,
+    email: string,
 }
 
 export class VNPay implements Strategy {
@@ -39,8 +40,8 @@ export class VNPay implements Strategy {
                 service: payload.serviceId,
                 name: payload.name,
                 jobId: payload.jobId,
+                email: payload.email,
             }
-            console.log('data in vnpay', data);
             const rs = await fetch(`http://localhost:8080/vnpay/create_payment_url`, {
                 credentials: 'include',
                 method: 'POST',

@@ -6,6 +6,9 @@ import Header from "@/components/Header";
 import Auth from "@/components/Auth";
 import ProviderRedux from "@/libs/reduxStore/Provider";
 import { cookies } from "next/headers";
+import { UserProvider } from "@/libs/contexts/user.context";
+import OrderProvider from "@/libs/contexts/order.context";
+import DrawerProvider from "@/libs/contexts/drawerConfirm.context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,17 +25,22 @@ export default function RootLayout({
 
   const cookieStore = cookies();
 
+  console.log('init value email', cookieStore.get('email')?.value);
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <ProviderRedux>
-          <Auth />
-          <Header initialUser={{
-            full_name: cookieStore.get('full_name')?.value,
-            avatar: cookieStore.get('avatar')?.value,
-          }} />
-          {children}
-          <Footer />
+          <UserProvider>
+            <DrawerProvider>
+              <OrderProvider>
+                <Auth />
+                <Header />
+                {children}
+                <Footer />
+              </OrderProvider>
+            </DrawerProvider>
+          </UserProvider>
         </ProviderRedux>
       </body>
     </html>

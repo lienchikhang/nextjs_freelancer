@@ -1,38 +1,22 @@
 "use client";
-import { Drawer, Skeleton, SwipeableDrawer, Typography } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import { SwipeableDrawer } from "@mui/material";
+import React, { useCallback, useEffect } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { toggle } from "@/libs/reduxStore/drawer.slide";
-import { IStateDrawer, IStateOrder } from "@/libs/interfaces/state.interface";
+import { useOrder } from "@/libs/contexts/order.context";
+import { useDrawer } from "@/libs/contexts/drawerConfirm.context";
 
-interface IState {
-    order: {
-        id: number,
-        price: number,
-        name: string,
-        image: string,
-        level: string,
-        jobId: number,
-    },
-    drawer: {
-        isDrawerOpen: boolean,
-    }
-}
 
 const DrawerComfirm = () => {
     const router = useRouter()
-    const selectOrder = useSelector<IState>(state => state.order) as IStateOrder;
-    const selectorDrawer = useSelector<IState>(state => state.drawer) as IStateDrawer;
-
-    const dispatch = useDispatch();
+    const { order } = useOrder();
+    const { isOpen, toggleDrawer } = useDrawer();
 
     useEffect(() => {
-        localStorage.setItem('order', JSON.stringify(selectOrder));
-    }, [selectOrder])
+        localStorage.setItem('order', JSON.stringify(order));
+    }, [order])
 
-    const toggleDrawer =
+    const toggleDrawerBase =
         (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
             if (
                 event &&
@@ -42,31 +26,29 @@ const DrawerComfirm = () => {
             ) {
                 return;
             }
-
-            dispatch(
-                toggle(open)
-            )
+            toggleDrawer(open);
         };
 
-
     const handleClose = useCallback(() => {
-        dispatch(
-            toggle(false)
-        );
+        toggleDrawer(false);
     }, []);
 
     const handleConfirm = () => {
-        router.push(`/payment/${selectOrder.name}`, {
+        router.push(`/payment/${order?.name}`, {
             scroll: true,
         })
+    }
+
+    if (!order) {
+        return <h1>Oops! There is something wrong here. Please try again</h1>
     }
 
     return (
         <SwipeableDrawer
             anchor={"right"}
-            open={(selectorDrawer.isDrawerOpen) as boolean}
-            onClose={toggleDrawer(false)}
-            onOpen={toggleDrawer(true)}
+            open={isOpen}
+            onClose={toggleDrawerBase(false)}
+            onOpen={toggleDrawerBase(true)}
         >
             <div className="drawer__title">
                 <h2>Order options</h2>
@@ -76,11 +58,11 @@ const DrawerComfirm = () => {
             </div>
             <div className="drawer__content">
                 <div className="hiredType">
-                    <h2>{selectOrder.level}</h2>
-                    <p>{selectOrder.price.toLocaleString()}</p>
+                    <h2>{order?.level}</h2>
+                    <p>{order?.price.toLocaleString()}</p>
                 </div>
                 <p className="desc">
-                    {selectOrder.name.replaceAll('-', ' ')}
+                    {order?.name.replaceAll('-', ' ')}
                 </p>
                 <div className="quantity">
                     <h2>How often do you need this order?</h2>
@@ -109,7 +91,7 @@ const DrawerComfirm = () => {
             </div>
             <div className="drawer__footer">
                 <button className="btn" onClick={handleConfirm}>
-                    Continue ({selectOrder.price.toLocaleString()})
+                    Continue ({order?.price.toLocaleString()})
                 </button>
                 <p>You won’t be charged yet</p>
             </div>

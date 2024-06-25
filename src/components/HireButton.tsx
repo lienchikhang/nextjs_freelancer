@@ -1,9 +1,8 @@
 'use client';
+import { useDrawer } from '@/libs/contexts/drawerConfirm.context';
+import { useOrder } from '@/libs/contexts/order.context';
 import { IService } from '@/libs/interfaces/gig.interface';
-import { toggle } from '@/libs/reduxStore/drawer.slide';
-import { setOrder } from '@/libs/reduxStore/order.slice';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 interface Props {
     data: IService,
@@ -16,7 +15,8 @@ interface Props {
 
 const HireButton: React.FC<Props> = ({ data, job }) => {
 
-    const dispatch = useDispatch();
+    const { createOrder } = useOrder();
+    const { toggleDrawer } = useDrawer();
 
     const handleClick = () => {
 
@@ -27,15 +27,11 @@ const HireButton: React.FC<Props> = ({ data, job }) => {
             image: job.image,
             level: data.service_level,
             jobId: job.jobId,
+            method: 'BALANCE',
         }
-        console.log('payload in hirebutton', payload);
-        dispatch(
-            setOrder(payload)
-        )
 
-        dispatch(
-            toggle(true)
-        )
+        createOrder(payload)
+        toggleDrawer(true);
     }
 
     return (

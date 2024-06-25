@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { IStateUser } from '@/libs/interfaces/state.interface';
+import { useUser } from '@/libs/contexts/user.context';
+import { cookies } from 'next/headers';
 
 interface IState {
     user: {
@@ -17,9 +19,17 @@ interface IState {
 const Navbar: React.FC = () => {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const selector = useSelector<IState>(state => state.user) as IStateUser;
+    const { user, logout, login } = useUser();
     const router = useRouter();
     const open = Boolean(anchorEl);
+
+    useEffect(() => {
+        const local = localStorage.getItem('root::user');
+        if (local) {
+            const payload = JSON.parse(local);
+            login(payload);
+        }
+    }, [])
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -45,17 +55,17 @@ const Navbar: React.FC = () => {
                 <Link href={'#'}>Become a seller</Link>
             </li>
             {
-                selector?.full_name ?
+                user ?
                     <div className='nav__login'>
                         {
-                            selector?.avatar ? <Link href={'#'}>
-                                <Avatar src={selector?.avatar} />
+                            user?.avatar ? <Link href={'#'}>
+                                <Avatar src={user?.avatar} />
                             </Link> :
                                 <Link href={'#'}>
-                                    <Avatar>{selector?.full_name[0]?.toUpperCase()}</Avatar>
+                                    <Avatar>{user?.name[0]?.toUpperCase()}</Avatar>
                                 </Link>
                         }
-                        <Link href={'#'}>{selector?.full_name}</Link>
+                        <Link href={'#'}>{user?.name}</Link>
                     </div> :
                     <React.Fragment>
                         <li className="nav__item">
