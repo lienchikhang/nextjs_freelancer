@@ -8,6 +8,9 @@ import http from "@/libs/http/http";
 import { IS_EMAIL } from "@/libs/constants/check.constants";
 import { User } from "@/libs/interfaces/user.interface";
 import { useUser } from "@/libs/contexts/user.context";
+import { useRouter } from "next/navigation";
+import { Flip, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props { }
 
@@ -24,7 +27,8 @@ const validateEmail = (value: string) => {
 };
 
 const LoginSection: React.FC<Props> = () => {
-    const { login } = useUser();
+    const { login, logout } = useUser();
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -33,10 +37,44 @@ const LoginSection: React.FC<Props> = () => {
         control,
     } = useForm<FormValues>();
 
+    useEffect(() => {
+        const handleLogout = async () => {
+            const rs = await fetch('http://localhost:8080/auth/logout', {
+                credentials: 'include',
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' },
+            }).then((res) => res.json());
+            if (rs.status == 200) {
+                logout();
+                localStorage.removeItem('root::user');
+                //all to server to clearCookie
+            }
+        }
+        setFocus("email");
+        handleLogout()
+    }, []);
+
+    const notifyError = (mess: string) => toast.error(mess, {
+        position: "bottom-center",
+        transition: Flip,
+    });
+
+    const notifySuccess = (mess: string) => toast.success(mess, {
+        position: "bottom-center",
+        transition: Flip,
+    });
+
     const onSubmit: SubmitHandler<FormValues> = async (formData) => {
 
         //call api login
         const rs = await http.post('auth/login', formData);
+
+        console.log('rs in login sec', rs);
+
+        //email or password is not valid
+        if (rs.status == 502) {
+            notifyError(rs.mess);
+        }
 
         if (rs.status == 200) {
             const userData: User = {
@@ -53,16 +91,17 @@ const LoginSection: React.FC<Props> = () => {
                 credentials: "include",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(rs.content),
-            })
+            });
+
+            notifySuccess(rs.mess);
+
+            router.push('/');
         }
     };
 
-    useEffect(() => {
-        setFocus("email");
-    }, []);
-
     return (
         <div className="login__wrapper">
+            <ToastContainer position="top-right" />
             <h1>Continue with your email or username</h1>
             <div className="form__wrapper">
                 <form action="" onSubmit={handleSubmit(onSubmit)}>

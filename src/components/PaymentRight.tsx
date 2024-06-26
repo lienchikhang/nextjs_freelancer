@@ -19,23 +19,6 @@ import { useOrder } from '@/libs/contexts/order.context';
 interface Props {
 }
 
-interface IState {
-    order: {
-        id: number,
-        price: number,
-        name: string,
-        image: string,
-        level: string,
-        method: string,
-        jobId: number,
-    },
-    user: {
-        full_name: string,
-        avatar: string | null,
-        email: string,
-    }
-}
-
 const PaymentRight: React.FC<Props> = ({ }) => {
     const [isPaid, setIsPaid] = useState(false);
     const { user, logout } = useUser();
@@ -78,15 +61,20 @@ const PaymentRight: React.FC<Props> = ({ }) => {
             name: order.name,
             jobId: order.jobId,
             email: user.email,
-        }, order.price)
+        }, order.price);
+
+        console.log('res in payment right', rs);
 
         if (rs.status == 401) {
+            localStorage.removeItem('root::user');
             logout();
         }
 
         //go back to home
-        if (rs.status == 200) {
+        if (order.method.toUpperCase() == 'VNPAY' && rs.status == 200) {
             router.push(rs.content);
+        } else {
+            router.push('/payment/result');
         }
     }
 

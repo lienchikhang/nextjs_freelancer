@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import http from './libs/http/http';
+import { cookies } from 'next/headers';
 
 export async function middleware(request: NextRequest) {
 
@@ -8,40 +9,36 @@ export async function middleware(request: NextRequest) {
     const cookieStore = request.cookies.get('token');
 
     console.log('cookieStore', cookieStore);
+    console.log('next_url', request.nextUrl);
+    console.log('url', request.url);
+
 
     if (cookieStore) {
-        const token = cookieStore.value;
 
-        console.log('tokeeeen', token);
         //validate token
-        const rs = await fetch(`http://localhost:8080/auth/check`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Cookie': token,
-            },
-            credentials: 'include'
-        })
+        const rs = await http.post('auth/check', cookieStore);
 
-        console.log('rs in midd', rs);
+        console.log('resssss', rs)
 
         if (rs.status == 200) {
             //case go to login => back to home
+            if (request.nextUrl.pathname.includes('login')) return NextResponse.redirect(new URL('/', request.url))
             //case go to register => back to home
+            if (request.nextUrl.pathname.includes('register')) return NextResponse.redirect(new URL('/', request.url))
             //case go to profile => pass
-            NextResponse.next();
-        } else
-            NextResponse.redirect(new URL('/auth/login', request.url))
+            return NextResponse.next();
+        } else {
+            if (!request.nextUrl.pathname.includes('login')) return NextResponse.redirect(new URL('/auth/login', request.url))
+        }
+    } else {
+        if (!request.nextUrl.pathname.includes('login')) return NextResponse.redirect(new URL('/auth/login', request.url))
     }
-
-    return NextResponse.redirect(new URL('/auth/login', request.url))
 }
 
 export const config = {
     matcher: [
-        // '/auth/login',
-        // '/auth/register',
-        // '/me',
+        '/auth/:path*',
+        '/me',
         '/payment/:path*'
     ]
 }
