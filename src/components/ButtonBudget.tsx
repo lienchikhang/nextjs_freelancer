@@ -71,7 +71,7 @@ const ButtonBudget = () => {
                 anchorEl={anchorEl}
                 onClose={handleClose}
             >
-                <input name='price' type="text" defaultValue={curPrice} placeholder="Enter budget" className="input-price" onChange={handleChangeSelect} />
+                <input min={10000} max={10000000} name='price' type="text" defaultValue={curPrice} placeholder="Enter budget" className="input-price" onChange={handleChangeSelect} />
                 <div className="btn-section">
                     <button onClick={handleCancel}>Cancel</button>
                     <button onClick={handleConfirm}>Apply</button>

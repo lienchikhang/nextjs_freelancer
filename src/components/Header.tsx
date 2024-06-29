@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import MenuDrawer from './MenuDrawer';
@@ -14,6 +14,8 @@ const Header: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showNavbar, setShowNavbar] = useState(false);
     const route = useRouter();
+    const path = usePathname();
+
 
     useEffect(() => {
         if (!router.split("/")[1]) {
@@ -52,8 +54,8 @@ const Header: React.FC = () => {
     };
 
     return (
-        <header>
-            <div className='header__wrapper'>
+        <header className={` ${path.includes('auth') ? 'auth' : ''}`}>
+            <div className={`header__wrapper`}>
                 <div className='header__start'>
                     <section className="header__menu" onClick={() => setIsOpen(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

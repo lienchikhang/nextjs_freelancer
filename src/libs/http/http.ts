@@ -12,11 +12,9 @@ const http = {
 
         })
             .then((res) => {
-                console.log('res in http', res);
                 return res.json()
             })
             .catch((err) => {
-                console.log('error in http:: ', err);
                 return {
                     data: null,
                     error: true,
@@ -31,6 +29,21 @@ const http = {
             credentials: "include",
             headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' },
             body: JSON.stringify(body),
+        })
+            .then((res) => res.json())
+            .catch((err) => {
+                return {
+                    data: null,
+                    error: true,
+                }
+            })
+    },
+
+    update(route: string) {
+        return fetch(`http://localhost:8080/${route}`, {
+            method: 'PATCH',
+            credentials: "include",
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' },
         })
             .then((res) => res.json())
             .catch((err) => {

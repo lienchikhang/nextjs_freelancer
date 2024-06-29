@@ -17,9 +17,11 @@ import { useOrder } from '@/libs/contexts/order.context';
 
 
 interface Props {
+    notifyError: (mess: string) => void;
+    notifySuccess: (mess: string) => void;
 }
 
-const PaymentRight: React.FC<Props> = ({ }) => {
+const PaymentRight: React.FC<Props> = ({ notifyError, notifySuccess }) => {
     const [isPaid, setIsPaid] = useState(false);
     const { user, logout } = useUser();
     const { order, createOrder } = useOrder();
@@ -39,9 +41,7 @@ const PaymentRight: React.FC<Props> = ({ }) => {
         if (isPaid) return;
         if (!user) {
             console.log('not login')
-            dispatch(
-                toggleModal(true)
-            )
+            notifyError('Please login to do this action!')
             return;
         }
 
@@ -67,13 +67,20 @@ const PaymentRight: React.FC<Props> = ({ }) => {
 
         if (rs.status == 401) {
             localStorage.removeItem('root::user');
+            notifyError(rs.mess);
             logout();
+        }
+
+        if (rs.status == 400) {
+            notifyError(rs.mess);
         }
 
         //go back to home
         if (order.method.toUpperCase() == 'VNPAY' && rs.status == 200) {
             router.push(rs.content);
-        } else {
+        }
+
+        if (order.method.toUpperCase() == 'BALANCE' && rs.status == 200) {
             router.push('/payment/result');
         }
     }

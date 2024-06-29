@@ -9,6 +9,10 @@
     .input-price {
         @apply px-4 py-3 rounded-md;
         border: 1px solid #dadbdd;
+
+        &:not(:in-range) {
+            @apply border-red-500;
+        }
     }
 
     .btn-section {

@@ -3,7 +3,7 @@ import CheckIcon from "@mui/icons-material/Check";
 
 const ArticalDefault = () => {
   return (
-    <React.Fragment>
+    <div className='ArticalDefault'>
       <img
         src="https://fiverr-res.cloudinary.com/npm-assets/layout-service/standard.0638957.png"
         alt=""
@@ -25,7 +25,7 @@ const ArticalDefault = () => {
           </li>
         </ul>
       </div>
-    </React.Fragment>
+    </div>
   )
 }
 

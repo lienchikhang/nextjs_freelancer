@@ -1,9 +1,6 @@
 "use client";
 import React, { useContext, useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Cookies from 'js-cookie';
-import { useDispatch } from "react-redux";
 import http from "@/libs/http/http";
 import { IS_EMAIL } from "@/libs/constants/check.constants";
 import { User } from "@/libs/interfaces/user.interface";
@@ -27,7 +24,7 @@ const validateEmail = (value: string) => {
 };
 
 const LoginSection: React.FC<Props> = () => {
-    const { login, logout } = useUser();
+    const { login, logout, user } = useUser();
     const router = useRouter();
     const {
         register,
@@ -38,20 +35,12 @@ const LoginSection: React.FC<Props> = () => {
     } = useForm<FormValues>();
 
     useEffect(() => {
-        const handleLogout = async () => {
-            const rs = await fetch('http://localhost:8080/auth/logout', {
-                credentials: 'include',
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' },
-            }).then((res) => res.json());
-            if (rs.status == 200) {
-                logout();
-                localStorage.removeItem('root::user');
-                //all to server to clearCookie
-            }
+        if (user) {
+            logout();
+            localStorage.removeItem('root:user');
         }
         setFocus("email");
-        handleLogout()
+        // handleLogout()
     }, []);
 
     const notifyError = (mess: string) => toast.error(mess, {
@@ -68,8 +57,6 @@ const LoginSection: React.FC<Props> = () => {
 
         //call api login
         const rs = await http.post('auth/login', formData);
-
-        console.log('rs in login sec', rs);
 
         //email or password is not valid
         if (rs.status == 502) {
@@ -102,7 +89,8 @@ const LoginSection: React.FC<Props> = () => {
     return (
         <div className="login__wrapper">
             <ToastContainer position="top-right" />
-            <h1>Continue with your email or username</h1>
+            <h1>Welcome back!</h1>
+            <h2>Continue with your email or username</h2>
             <div className="form__wrapper">
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
                     <Controller
@@ -163,6 +151,19 @@ const LoginSection: React.FC<Props> = () => {
                         >
                             Continue
                         </button>
+                    </div>
+
+                    <p>Don’t have an account?</p>
+                    <div className="btn__wrapper">
+                        <button>Continue with Google</button>
+                        <button onClick={() => { }}>
+                            Continue with email/username
+                        </button>
+                    </div>
+                    <p className="breakline">OR</p>
+                    <div className="btn__wrapper">
+                        <button>Apple</button>
+                        <button>Facebook</button>
                     </div>
                 </form>
             </div>

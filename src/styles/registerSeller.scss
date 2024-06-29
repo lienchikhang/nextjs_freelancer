@@ -1,0 +1,19 @@
+.registerSeller__wrapper {
+    @apply flex justify-center items-center p-28;
+
+    .registerSeller__main {
+        @apply flex flex-col justify-center items-center gap-10;
+
+        p {
+            @apply font-semibold text-lg text-zinc-700;
+        }
+
+        button {
+            @apply px-4 py-2 text-white font-semibold rounded-sm bg-green-500 transition-all;
+
+            &:hover {
+                @apply bg-green-400;
+            }
+        }
+    }
+}

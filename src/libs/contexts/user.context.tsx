@@ -15,8 +15,21 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         setUser(userData);
     };
 
-    const logout = () => {
+    const logout = async () => {
         setUser(null);
+        const rs = await fetch('http://localhost:8080/auth/logout', {
+            credentials: 'include',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' },
+        }).then((res) => res.json());
+        if (rs.status == 200) {
+            localStorage.removeItem('root::user');
+            //all to server to clearCookie
+            await fetch('/api/auth', {
+                method: 'DELETE',
+            });
+        }
+
     };
 
     return (

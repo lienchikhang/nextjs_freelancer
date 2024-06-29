@@ -4,9 +4,14 @@ header {
 
     border-bottom: 1px solid #e4e5e7;
 
+    &.auth {
+        @apply hidden;
+    }
+
     div.header__wrapper {
 
         @apply w-[92%] mx-auto flex justify-between items-center sm:gap-5;
+
 
         .header__start {
             @apply flex items-center gap-1;
@@ -39,6 +44,12 @@ header {
 
             .nav__login {
                 @apply flex items-center gap-4;
+
+                li {
+                    svg {
+                        @apply w-[30px] h-[30px] mr-0;
+                    }
+                }
             }
 
             .nav__item {

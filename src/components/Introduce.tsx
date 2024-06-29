@@ -21,6 +21,7 @@ const Introduce = () => {
                     controls={true}
                     autoPlay
                     preload='auto'
+                    muted
                     poster='https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/ef51b45f79342925d5268e0b2377eae8-1704717764992/thumbnail.png'
                 ></video>
             </div>
