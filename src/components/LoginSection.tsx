@@ -8,6 +8,7 @@ import { useUser } from "@/libs/contexts/user.context";
 import { useRouter } from "next/navigation";
 import { Flip, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import FacebookLogin from 'react-facebook-login';
 
 interface Props { }
 
@@ -86,6 +87,32 @@ const LoginSection: React.FC<Props> = () => {
         }
     };
 
+    const handleLoginFacebook = async () => {
+        // const rs = await fetch('http://localhost:8080/auth/facebook/login', {
+        //     method: 'GET',
+        //     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' },
+        // });
+
+        // console.log('result in login fb', rs);
+        // // router.push(' http://localhost:3000/facebook');
+        // console.log('rs in handleLoginFacebook', rs);
+        // const width = 600;
+        // const height = 600;
+        // const left = (window.screen.width / 2) - (width / 2);
+        // const top = (window.screen.height / 2) - (height / 2);
+
+        // window.open(
+        //     'http://localhost:8080/auth/facebook/login',
+        //     'Facebook Login',
+        //     `width=${width},height=${height},top=${top},left=${left}`
+        // );
+        window.location.href = 'http://localhost:8080/auth/facebook/login'
+    }
+
+    const responseFacebook = (response: any) => {
+        console.log(response);
+    }
+
     return (
         <div className="login__wrapper">
             <ToastContainer position="top-right" />
@@ -163,7 +190,12 @@ const LoginSection: React.FC<Props> = () => {
                     <p className="breakline">OR</p>
                     <div className="btn__wrapper">
                         <button>Apple</button>
-                        <button>Facebook</button>
+                        <button onClick={handleLoginFacebook} type="button">Facebook</button>
+                        {/* <FacebookLogin
+                            appId="317096608138767"
+                            autoLoad={true}
+                            fields="name,email,picture"
+                            callback={responseFacebook} /> */}
                     </div>
                 </form>
             </div>
