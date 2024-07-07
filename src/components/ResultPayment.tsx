@@ -1,11 +1,25 @@
 'use client';
-import http from '@/libs/http/http';
-import { useSearchParams } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React from 'react';
+import '../styles/paymentResult.scss';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { useRouter } from 'next/router';
 
 const ResultPayment = () => {
+
+    const router = useRouter();
+
+    const handleClick = () => {
+        router.push('/search')
+    }
+
     return (
-        <div>Thank you for using our service.</div>
+        <div className='payment__wrapper'>
+            <CheckCircleIcon className='successful__icon' />
+            <h1>Payment successful</h1>
+            <p>Thank you for using our service!</p>
+            <button onClick={handleClick}>Continue <NavigateNextIcon /></button>
+        </div>
     )
 }
 

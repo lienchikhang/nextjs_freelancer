@@ -1,7 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // images: {
+  //   domains: ["res.cloudinary.com", "https://www.facebook.com"],
+  // },
   images: {
-    domains: ["res.cloudinary.com", "https://www.facebook.com"],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.facebook.com',
+      },
+    ],
   },
   reactStrictMode: false
 };

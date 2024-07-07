@@ -1,4 +1,4 @@
-.loginPage {
+.regisPage {
     @apply w-[80%] py-14 mx-auto grid grid-cols-12 items-center gap-4;
 
     .ArticalDefault {
@@ -10,7 +10,7 @@
 
 
         .modal__info {
-            @apply absolute w-full top-10 left-10 z-20 px-12 py-14;
+            @apply absolute w-full top-10 left-3 z-20 px-12 py-14;
 
             h2 {
                 @apply text-white font-bold text-3xl mb-8;
@@ -32,7 +32,7 @@
             }
 
             .info__item {
-                @apply flex px-4 py-2 rounded-full border items-center gap-3 bg-white mb-6;
+                @apply flex px-4 py-2 rounded-full border items-center gap-3 bg-white mb-6 -skew-x-6;
                 box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
                 svg {
@@ -50,7 +50,7 @@
         }
     }
 
-    .login__wrapper {
+    .regis__wrapper {
         @apply col-span-6 p-12;
 
         h1 {
@@ -153,12 +153,13 @@
             }
 
             .btn-back {
-                @apply absolute top-5 left-9;
+                @apply absolute top-3 left-9 mb-4;
 
                 svg {
                     @apply mr-2;
                 }
             }
         }
+
     }
 }

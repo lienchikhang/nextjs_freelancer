@@ -2,14 +2,15 @@ import { NextApiResponse } from "next";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, res: NextApiResponse) {
+
+export async function POST(req: Request, res: NextResponse) {
 
     const payload = await new Response(req.body).json();
 
     console.log('payload in api rout', payload);
 
     if (!payload.token || !payload.user) {
-        return res.status(400).json({ message: 'Cookie not found!' });
+        return NextResponse.json({ message: 'Cookie not found!' }, { status: 200 });;
     }
 
     const response = NextResponse.json({ message: 'Cookie set successfully' }, { status: 200 });
@@ -17,6 +18,8 @@ export async function POST(req: Request, res: NextApiResponse) {
         path: '/',
         httpOnly: true,
     });
+
+    // res.setHeader('Set-Cookie', `token=${payload.token}; Path='/'`);
 
 
     return response;

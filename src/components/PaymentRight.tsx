@@ -45,6 +45,8 @@ const PaymentRight: React.FC<Props> = ({ notifyError, notifySuccess }) => {
             return;
         }
 
+        console.log('userrr', user)
+
         const payment = new Payment(new Balance());
 
         if (order.method.toUpperCase() == PAYMENT.VNPAY) {
