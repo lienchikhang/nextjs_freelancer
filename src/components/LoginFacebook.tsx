@@ -1,12 +1,20 @@
 'use client';
 import { useUser } from '@/libs/contexts/user.context';
-import { usePathname, useSearchParams } from 'next/navigation';
-import React, { useEffect } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import '../styles/loginSuccessPage.scss';
 
 const LoginFacebook = () => {
 
     const query = useSearchParams();
     const { login } = useUser();
+    const router = useRouter();
+
+    const handleClick = () => {
+        router.push('/search')
+    }
 
 
     useEffect(() => {
@@ -29,8 +37,10 @@ const LoginFacebook = () => {
     }, []);
 
     return (
-        <div>
-            <button>Continue</button>
+        <div className='login-success__wrapper'>
+            <CheckCircleIcon className='successful__icon' />
+            <h1>Login successful</h1>
+            <button onClick={handleClick}>Continue <NavigateNextIcon /></button>
         </div>
     )
 }

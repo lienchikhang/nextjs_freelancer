@@ -14,6 +14,8 @@ import http from '@/libs/http/http';
 import { updateMethod } from '@/libs/reduxStore/order.slice';
 import { useUser } from '@/libs/contexts/user.context';
 import { useOrder } from '@/libs/contexts/order.context';
+import ButtonObject from '@/libs/classes/Button';
+import { useSession } from '@/libs/contexts/session.context';
 
 
 interface Props {
@@ -23,6 +25,7 @@ interface Props {
 
 const PaymentRight: React.FC<Props> = ({ notifyError, notifySuccess }) => {
     const [isPaid, setIsPaid] = useState(false);
+    const { handleExpired } = useSession();
     const { user, logout } = useUser();
     const { order, createOrder } = useOrder();
     const dispatch = useDispatch();
@@ -42,6 +45,13 @@ const PaymentRight: React.FC<Props> = ({ notifyError, notifySuccess }) => {
         if (!user) {
             console.log('not login')
             notifyError('Please login to do this action!')
+            return;
+        }
+
+        const isNotExpired = await ButtonObject.checkExpired();
+
+        if (!isNotExpired) {
+            handleExpired(true);
             return;
         }
 

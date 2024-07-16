@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+'use client';
+import React, { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { IData } from "./RegisterSection";
@@ -6,6 +7,8 @@ import Otp from "./OtpSection";
 import { Input, Typography } from "antd";
 import type { GetProp } from "antd";
 import type { OTPProps } from "antd/es/input/OTP";
+import http from "@/libs/http/http";
+import { useRouter } from "next/navigation";
 
 interface Props {
     updateState: (number: number) => void;
@@ -25,7 +28,20 @@ const ModalStateOtp: React.FC<Props> = ({ updateState, data }) => {
         setFocus,
         control,
     } = useForm<FormValues>();
-    const [code, setCode] = useState("");
+    const [otp, setCode] = useState("");
+    const router = useRouter();
+
+    useEffect(() => {
+        //call api send otp
+        const fetch = async () => {
+            const rs = await http.post('mail/send', {
+                to: data?.email,
+            });
+
+            console.log('rs in otp', rs);
+        }
+        fetch();
+    }, [])
 
     const onChange: GetProp<typeof Input.OTP, "onChange"> = (text) => {
         console.log("onChange:", text);
@@ -36,10 +52,28 @@ const ModalStateOtp: React.FC<Props> = ({ updateState, data }) => {
         onChange,
     };
 
+    console.log({ errors });
+
     const onSubmit: SubmitHandler<FormValues> = async (formData) => {
-        //call api check otp valid (otp was saved at redis)
-        // if invalid => type again (setText)
-        // if valid => call api register
+        const rs = await http.post('auth/register', {
+            email: data?.email,
+            password: data?.password,
+            fullName: data?.full_name,
+            otp: formData.otp,
+        });
+
+        console.log('rs in submit regis', rs);
+
+        if (rs.status == 400) {
+            //notify
+        }
+
+        if (rs.status == 200) {
+            //notify
+            setTimeout(() => {
+                router.push('/auth/login');
+            }, 1000)
+        }
     };
 
     return (
@@ -67,12 +101,18 @@ const ModalStateOtp: React.FC<Props> = ({ updateState, data }) => {
                                     <Input.OTP
                                         formatter={(str) => str.toUpperCase()}
                                         {...sharedProps}
+                                        {...field}
                                     />
+                                    {fieldState.error && (
+                                        <span className="error">{fieldState.error.message}</span>
+                                    )}
                                 </div>
                             );
                         }}
                     />
-
+                    <div>
+                        <p>Don't get OTP? <a href="">Reset now</a></p>
+                    </div>
                     <div className="btn__wrapper">
                         <button
                             className={`${errors.otp ? "unactive" : "active"}`}

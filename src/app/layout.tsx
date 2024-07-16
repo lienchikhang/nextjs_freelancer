@@ -9,6 +9,9 @@ import { cookies } from "next/headers";
 import { UserProvider } from "@/libs/contexts/user.context";
 import OrderProvider from "@/libs/contexts/order.context";
 import DrawerProvider from "@/libs/contexts/drawerConfirm.context";
+import { SessionProvider } from "@/libs/contexts/session.context";
+import SessionExpired from "@/components/SessionExpired";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,16 +34,18 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className}`}>
         <ProviderRedux>
-          <UserProvider>
-            <DrawerProvider>
-              <OrderProvider>
-                <Auth />
-                <Header />
-                {children}
-                <Footer />
-              </OrderProvider>
-            </DrawerProvider>
-          </UserProvider>
+          <SessionProvider>
+            <UserProvider>
+              <DrawerProvider>
+                <OrderProvider>
+                  {/* <Auth /> */}
+                  <Header />
+                  {children}
+                  <Footer />
+                </OrderProvider>
+              </DrawerProvider>
+            </UserProvider>
+          </SessionProvider>
         </ProviderRedux>
       </body>
     </html>

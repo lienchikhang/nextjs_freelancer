@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/modal": "^2.3.1",
+    "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@headlessui/react": "^2.0.4",
@@ -21,9 +23,11 @@
     "@types/react-facebook-login": "^4.1.11",
     "@types/react-slick": "^0.23.13",
     "antd": "^5.19.1",
+    "framer-motion": "^11.3.2",
     "js-cookie": "^3.0.5",
     "lottie-react": "^2.4.0",
     "next": "14.2.4",
+    "nodemailer": "^6.9.14",
     "react": "^18",
     "react-dom": "^18",
     "react-facebook-login": "^4.1.1",

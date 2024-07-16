@@ -5,6 +5,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useRouter } from "next/navigation";
 import { useOrder } from "@/libs/contexts/order.context";
 import { useDrawer } from "@/libs/contexts/drawerConfirm.context";
+import ButtonObject from "@/libs/classes/Button";
 
 
 const DrawerComfirm = () => {
@@ -34,6 +35,7 @@ const DrawerComfirm = () => {
     }, []);
 
     const handleConfirm = () => {
+        ButtonObject.checkExpired();
         router.push(`/payment/${order?.name}`, {
             scroll: true,
         })

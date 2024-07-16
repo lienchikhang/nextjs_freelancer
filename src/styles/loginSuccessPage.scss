@@ -1,0 +1,20 @@
+.login-success__wrapper {
+    @apply w-[92%] mx-auto py-32 flex flex-col items-center;
+
+    svg.successful__icon {
+        @apply w-24 h-24 text-green-500 mb-4;
+    }
+
+    h1 {
+        @apply text-4xl font-semibold mb-4;
+    }
+
+    p {
+        @apply text-lg font-normal mb-8;
+    }
+
+    button {
+        @apply px-6 py-2 rounded-lg bg-green-500 text-white font-semibold;
+
+    }
+}
