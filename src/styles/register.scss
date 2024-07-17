@@ -120,7 +120,7 @@
                     }
 
                     &.unactive {
-                        @apply bg-gray-200 text-gray-500;
+                        @apply bg-zinc-100 text-zinc-400 cursor-not-allowed;
                     }
                 }
 
@@ -152,12 +152,13 @@
                 }
             }
 
-            .btn-back {
-                @apply absolute top-3 left-9 mb-4;
+        }
 
-                svg {
-                    @apply mr-2;
-                }
+        .btn-back {
+            @apply mb-6;
+
+            svg {
+                @apply mr-2;
             }
         }
 

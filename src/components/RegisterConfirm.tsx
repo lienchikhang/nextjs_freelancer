@@ -2,6 +2,7 @@ import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { IData } from "./RegisterSection";
+import http from "@/libs/http/http";
 
 interface Props {
     updateState: (number: number) => void;
@@ -34,6 +35,13 @@ const ModalStateConfirm: React.FC<Props> = ({
                 full_name: formData.full_name,
             });
         }
+
+        const rs = await http.post('mail/send', {
+            to: data?.email,
+        });
+
+        console.log('rs in otp', rs);
+
     };
 
     return (
@@ -67,7 +75,7 @@ const ModalStateConfirm: React.FC<Props> = ({
                     />
 
                     {errors.full_name && (
-                        <p className="px-1 text-sm text-red-500">
+                        <p className="px-1 text-sm text-red-500 mb-3">
                             {errors.full_name.message}
                         </p>
                     )}

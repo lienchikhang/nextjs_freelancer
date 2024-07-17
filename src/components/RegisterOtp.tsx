@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 
 interface Props {
     updateState: (number: number) => void;
+    notifyError: (mess: string) => void;
+    notifySuccess: (mess: string) => void;
     data: IData | null;
 }
 
@@ -19,7 +21,7 @@ interface FormValues {
     otp: string;
 }
 
-const ModalStateOtp: React.FC<Props> = ({ updateState, data }) => {
+const ModalStateOtp: React.FC<Props> = ({ updateState, data, notifySuccess, notifyError }) => {
     const { Title } = Typography;
     const {
         register,
@@ -30,18 +32,6 @@ const ModalStateOtp: React.FC<Props> = ({ updateState, data }) => {
     } = useForm<FormValues>();
     const [otp, setCode] = useState("");
     const router = useRouter();
-
-    useEffect(() => {
-        //call api send otp
-        const fetch = async () => {
-            const rs = await http.post('mail/send', {
-                to: data?.email,
-            });
-
-            console.log('rs in otp', rs);
-        }
-        fetch();
-    }, [])
 
     const onChange: GetProp<typeof Input.OTP, "onChange"> = (text) => {
         console.log("onChange:", text);
@@ -66,13 +56,16 @@ const ModalStateOtp: React.FC<Props> = ({ updateState, data }) => {
 
         if (rs.status == 400) {
             //notify
+            notifyError(rs.mess);
         }
 
         if (rs.status == 200) {
             //notify
             setTimeout(() => {
                 router.push('/auth/login');
-            }, 1000)
+            }, 1000);
+
+            notifySuccess(rs.mess);
         }
     };
 

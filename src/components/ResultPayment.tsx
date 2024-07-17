@@ -3,7 +3,7 @@ import React from 'react';
 import '../styles/paymentResult.scss';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const ResultPayment = () => {
 

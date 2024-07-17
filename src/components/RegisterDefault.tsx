@@ -116,11 +116,11 @@ const ModalStateRegister: React.FC<Props> = ({ updateState, updateData }) => {
                     />
 
                     {errors.email && (
-                        <p className="px-1 text-sm text-red-500">{errors.email.message}</p>
+                        <p className="px-1 text-sm text-red-500 mb-3">{errors.email.message}</p>
                     )}
 
                     {
-                        !isEmailValid && <p className="px-1 text-sm text-red-500">{emailMess}</p>
+                        !isEmailValid && <p className="px-1 text-sm text-red-500 mb-3">{emailMess}</p>
                     }
 
                     <Controller
@@ -142,7 +142,7 @@ const ModalStateRegister: React.FC<Props> = ({ updateState, updateData }) => {
                     />
 
                     {errors.password && (
-                        <p className="px-1 text-sm text-red-500">
+                        <p className="px-1 text-sm text-red-500 mb-3">
                             {errors.password.message}
                         </p>
                     )}

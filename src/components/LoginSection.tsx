@@ -94,6 +94,10 @@ const LoginSection: React.FC<Props> = () => {
         window.location.href = 'http://localhost:8080/auth/facebook/login'
     }
 
+    const handleLoginGoogle = async () => {
+        window.location.href = 'http://localhost:8080/auth/google/login'
+    }
+
     const responseFacebook = (response: any) => {
         console.log(response);
     }
@@ -167,7 +171,7 @@ const LoginSection: React.FC<Props> = () => {
 
                     <p>Don’t have an account? <Link className="link__join" href="/auth/register">Join now</Link></p>
                     <div className="btn__wrapper">
-                        <button className="google">
+                        <button className="google" onClick={handleLoginGoogle} type="button">
                             <GoogleIcon />
                             Continue with Google
                         </button>
