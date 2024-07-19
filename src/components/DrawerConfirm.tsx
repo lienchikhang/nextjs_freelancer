@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { useOrder } from "@/libs/contexts/order.context";
 import { useDrawer } from "@/libs/contexts/drawerConfirm.context";
 import ButtonObject from "@/libs/classes/Button";
+import { useSession } from "@/libs/contexts/session.context";
 
 
 const DrawerComfirm = () => {
     const router = useRouter()
     const { order } = useOrder();
     const { isOpen, toggleDrawer } = useDrawer();
+    const { handleExpired } = useSession();
 
     useEffect(() => {
         localStorage.setItem('order', JSON.stringify(order));
@@ -34,11 +36,16 @@ const DrawerComfirm = () => {
         toggleDrawer(false);
     }, []);
 
-    const handleConfirm = () => {
-        ButtonObject.checkExpired();
-        router.push(`/payment/${order?.name}`, {
-            scroll: true,
-        })
+    const handleConfirm = async () => {
+        const isPass = await ButtonObject.checkExpired();
+        if (isPass) {
+            router.push(`/payment/${order?.name}`, {
+                scroll: true,
+            });
+            handleExpired(false);
+        } else {
+            handleExpired(true);
+        }
     }
 
     if (!order) {

@@ -4,6 +4,7 @@ import ProfileInfo from './ProfileInfo';
 import UserGig from './UserGig';
 import RegisterSeller from './RegisterSeller';
 import { Flip, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IResponse {
     status: number,
@@ -51,7 +52,7 @@ const ProfilePage: React.FC<Props> = ({ data }) => {
                             <h2>Your job</h2>
                         </div>
                         {data[3].status == 403 && <RegisterSeller notifySuccess={notifySuccess} />}
-                        {data[3].status == 200 && <UserGig />}
+                        {data[3].status == 200 && <UserGig data={data[3].content} />}
                     </div>
                 </div>
             </div>

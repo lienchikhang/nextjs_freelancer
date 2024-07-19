@@ -9,6 +9,8 @@ import {
 import React from "react";
 import "../../styles/searchPage.scss";
 import JobList from "@/components/JobList";
+import { ChakraProvider } from "@chakra-ui/react";
+import SessionExpired from "@/components/SessionExpired";
 
 export const metadata: Metadata = {
   title: "Freelancer | Save and Secure",
@@ -19,6 +21,9 @@ export const metadata: Metadata = {
 const SearchPage = () => {
   return (
     <div className="searchPage">
+      {/* <ChakraProvider>
+        <SessionExpired />
+      </ChakraProvider> */}
       <SearchTitle />
       <JobList />
     </div>

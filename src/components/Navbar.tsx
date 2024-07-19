@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useUser } from '@/libs/contexts/user.context';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import ButtonObject from '@/libs/classes/Button';
+import { useSession } from '@/libs/contexts/session.context';
 
 interface IState {
     user: {
@@ -18,6 +20,7 @@ const Navbar: React.FC = () => {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const { user, logout, login } = useUser();
+    const { handleExpired } = useSession();
     const router = useRouter();
     const open = Boolean(anchorEl);
 
@@ -37,9 +40,16 @@ const Navbar: React.FC = () => {
         setAnchorEl(null);
     };
 
-    const handleProfile = () => {
-        router.push(`/profile/${user?.name}`)
-        handleClose();
+    const handleProfile = async () => {
+        const isNotExpired = await ButtonObject.checkExpired();
+        console.log('isPass', isNotExpired);
+        if (isNotExpired) {
+            router.push(`/profile/${user?.name}`)
+            handleExpired(false);
+            handleClose();
+        } else {
+            handleExpired(true);
+        }
     }
 
     const handleLogout = () => {

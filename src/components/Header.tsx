@@ -54,7 +54,7 @@ const Header: React.FC = () => {
     };
 
     return (
-        <header className={` ${path.includes('auth') ? 'auth' : ''}`}>
+        <header className={`myHeader ${path.includes('auth') ? 'auth' : ''}`}>
             <div className={`header__wrapper`}>
                 <div className='header__start'>
                     <section className="header__menu" onClick={() => setIsOpen(true)}>

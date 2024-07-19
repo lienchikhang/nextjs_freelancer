@@ -1,7 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/registerSeller.scss';
 import http from '@/libs/http/http';
+import Lottie from 'lottie-react';
+import animationData from '../../public/videos/success.json';
 
 interface Props {
     notifySuccess: (mess: string) => void;
@@ -9,12 +11,28 @@ interface Props {
 
 const RegisterSeller: React.FC<Props> = ({ notifySuccess }) => {
 
+    const [success, setSuccess] = useState(false);
+
     const handleRegister = async () => {
         //open modal confirm
         //click ok => fetch api
         const rs = await http.update('user/active');
-        if (rs.status == 200) notifySuccess(rs.mess);
+        if (rs.status == 200) { notifySuccess(rs.mess), setSuccess(true) };
         //logout user
+    }
+
+    const handleContinue = () => {
+        window.location.reload();
+    }
+
+    if (success) {
+        return <div>
+            <Lottie
+                animationData={animationData}
+                height={50}
+                width={50} />
+            <button onClick={handleContinue}>Continue</button>
+        </div>
     }
 
     return (

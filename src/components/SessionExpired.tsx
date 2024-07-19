@@ -28,32 +28,36 @@ const SessionExpired = () => {
         handleExpired(false);
         router.push('/auth/login');
     }
-    return (
-        <AlertDialog
-            isOpen={isExpired}
-            leastDestructiveRef={cancelRef}
-            onClose={onClose}
-        >
-            <AlertDialogOverlay>
-                <AlertDialogContent>
-                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Session Expired
-                    </AlertDialogHeader>
-                    <AlertDialogBody>
-                        Please login to do this action
-                    </AlertDialogBody>
 
-                    <AlertDialogFooter>
-                        <Button ref={cancelRef} onClick={handleReject}>
-                            Cancel
-                        </Button>
-                        <Button colorScheme='red' onClick={handleAccept} ml={3}>
-                            Login
-                        </Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialogOverlay>
-        </AlertDialog>
+    console.log({ isExpired })
+    return (
+        <>
+            <AlertDialog
+                isOpen={isExpired}
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Session Expired
+                        </AlertDialogHeader>
+                        <AlertDialogBody>
+                            Please login to do this action
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={handleReject}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme='red' onClick={handleAccept} ml={3}>
+                                Login
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
+        </>
     )
 }
 
