@@ -38,8 +38,6 @@ export default function RootLayout({
             <UserProvider>
               <DrawerProvider>
                 <OrderProvider>
-                  {/* <Auth /> */}
-                  {/* <SessionExpired /> */}
                   <ChakraProvider>
                     <SessionExpired />
                   </ChakraProvider>

@@ -19,6 +19,21 @@
         .gigInfo {
             @apply col-span-6;
 
+            .gigForm {
+                @apply mb-4;
+            }
+
+            .gigSelect {
+                @apply mb-4;
+
+                h2 {
+                    @apply mb-2 font-medium;
+                }
+            }
+        }
+
+        .gigService {
+            @apply col-span-12;
         }
     }
 }
