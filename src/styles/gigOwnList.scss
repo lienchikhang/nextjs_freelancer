@@ -1,0 +1,66 @@
+.userGig__wrapper {
+    .userGig__navbar {
+        @apply flex justify-between items-center py-4;
+
+        .userGig__btns {
+            @apply flex gap-4;
+
+            button {
+                @apply px-5 py-2 font-semibold rounded-md border-2 transition-all;
+
+                &:first-child {
+                    @apply bg-green-500 text-white border-green-500;
+                }
+
+                &:last-child {
+                    @apply bg-transparent border-red-500 text-red-500;
+
+                    &:hover {
+                        @apply bg-red-500 text-white;
+                    }
+                }
+            }
+        }
+    }
+
+    .userGig__list {
+
+        @apply flex flex-col-reverse gap-5;
+
+        .gigItem {
+            @apply flex items-center gap-5 justify-between p-4 shadow-md rounded-xl;
+
+            .gigItem__image {
+                @apply w-[120px] h-[120px] object-cover rounded-lg;
+            }
+
+            .gigItem__name {
+                @apply text-base font-semibold flex-1;
+            }
+
+            .gigItem__btns {
+                @apply flex gap-5;
+
+                button {
+                    @apply px-5 py-2 font-semibold rounded-md border-2 transition-all;
+
+                    &:first-child {
+                        @apply bg-blue-500 text-white border-blue-500;
+
+                        &:hover {
+                            @apply bg-blue-400;
+                        }
+                    }
+
+                    &:last-child {
+                        @apply bg-transparent border-red-500 text-red-500;
+
+                        &:hover {
+                            @apply bg-red-500 text-white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

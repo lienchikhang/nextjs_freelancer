@@ -1,6 +1,8 @@
 'use client';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
+import '../styles/gigOwnList.scss';
+import GigItem from './GigItem';
 
 interface Props {
     data: any[];
@@ -11,7 +13,7 @@ const UserGig: React.FC<Props> = ({ data }) => {
     const router = useRouter();
     const path = usePathname();
 
-    console.log('path', path);
+    console.log('data', data);
 
     const handleClick = () => {
         router.push(`${path}/create`);
@@ -30,7 +32,24 @@ const UserGig: React.FC<Props> = ({ data }) => {
     }
 
     return (
-        <div>UserGig</div>
+        <div className='userGig__wrapper'>
+            <div className="userGig__navbar">
+                <div>
+                    <h3>Gigs</h3>
+                </div>
+                <div className='userGig__btns'>
+                    <button onClick={handleClick}>Create one</button>
+                    <button>Delete all</button>
+                </div>
+            </div>
+            <div className='userGig__list'>
+                {
+                    data.map((gig, idx: number) => {
+                        return <GigItem key={idx} data={gig} />
+                    })
+                }
+            </div>
+        </div>
     )
 }
 

@@ -3,6 +3,7 @@ import '../../../../styles/createPage.scss';
 import UploadGigImage from '@/components/UploadGigImage';
 import CreateSection from '@/components/CreateSection';
 import { ChakraProvider } from '@chakra-ui/react';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreatePage = () => {
     return (

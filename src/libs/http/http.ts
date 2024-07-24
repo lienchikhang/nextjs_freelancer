@@ -52,6 +52,24 @@ const http = {
                     error: true,
                 }
             })
+    },
+
+    upload: (route: string, formData: any) => {
+        return fetch(`http://localhost:8080/${route}`, {
+            method: 'POST',
+            credentials: "include",
+            body: formData,
+            // headers: {
+            //     'Content-Type': 'multipart/form-data',
+            //     'Access-Control-Allow-Credentials': 'true'
+            // }
+        }).then((res) => res.json())
+            .catch((err) => {
+                return {
+                    data: null,
+                    error: true,
+                }
+            })
     }
 }
 

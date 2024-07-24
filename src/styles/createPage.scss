@@ -10,30 +10,50 @@
     }
 
     .createPage__body {
-        @apply py-6 grid grid-cols-12 gap-10;
 
-        .gigImage {
-            @apply col-span-6;
-        }
+        .create__section {
+            @apply py-6 grid grid-cols-12 gap-10;
 
-        .gigInfo {
-            @apply col-span-6;
-
-            .gigForm {
-                @apply mb-4;
+            .gigImage {
+                @apply col-span-6;
             }
 
-            .gigSelect {
-                @apply mb-4;
+            .gigInfo {
+                @apply col-span-6;
 
-                h2 {
-                    @apply mb-2 font-medium;
+                .gigForm {
+                    @apply mb-4;
+                }
+
+                .gigSelect {
+                    @apply mb-4;
+
+                    h2 {
+                        @apply mb-2 font-medium;
+                    }
+                }
+            }
+
+            .gigService {
+                @apply col-span-12;
+
+                .ant-card-head {
+                    @apply bg-green-500 text-white;
+                }
+
+                .ant-card-body {
+                    @apply border-2 border-zinc-100;
+                }
+
+                .final-btn {
+                    @apply block mx-auto px-6 py-2 bg-green-500 rounded-md text-white font-semibold mt-6 transition-all;
+
+                    &:hover {
+                        @apply bg-green-400;
+                    }
                 }
             }
         }
 
-        .gigService {
-            @apply col-span-12;
-        }
     }
 }
