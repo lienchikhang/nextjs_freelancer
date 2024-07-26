@@ -23,7 +23,6 @@ const http = {
     },
 
     post(route: string, body: any) {
-        console.log('body', body);
         return fetch(`http://localhost:8080/${route}`, {
             method: 'POST',
             credentials: "include",
@@ -59,11 +58,23 @@ const http = {
             method: 'POST',
             credentials: "include",
             body: formData,
-            // headers: {
-            //     'Content-Type': 'multipart/form-data',
-            //     'Access-Control-Allow-Credentials': 'true'
-            // }
         }).then((res) => res.json())
+            .catch((err) => {
+                return {
+                    data: null,
+                    error: true,
+                }
+            })
+    },
+
+    patch: (route: string) => {
+        return fetch(`http://localhost:8080/${route}`, {
+            method: 'PATCH',
+            credentials: "include",
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' },
+            // body: JSON.stringify(body),
+        })
+            .then((res) => res.json())
             .catch((err) => {
                 return {
                     data: null,

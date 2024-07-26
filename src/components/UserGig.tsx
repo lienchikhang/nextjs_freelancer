@@ -6,14 +6,13 @@ import GigItem from './GigItem';
 
 interface Props {
     data: any[];
+    handleDelete: (gigId: number) => void;
 }
 
-const UserGig: React.FC<Props> = ({ data }) => {
+const UserGig: React.FC<Props> = ({ data, handleDelete }) => {
 
     const router = useRouter();
     const path = usePathname();
-
-    console.log('data', data);
 
     const handleClick = () => {
         router.push(`${path}/create`);
@@ -45,7 +44,7 @@ const UserGig: React.FC<Props> = ({ data }) => {
             <div className='userGig__list'>
                 {
                     data.map((gig, idx: number) => {
-                        return <GigItem key={idx} data={gig} />
+                        return <GigItem key={idx} data={gig} handleAlertDelete={handleDelete} />
                     })
                 }
             </div>

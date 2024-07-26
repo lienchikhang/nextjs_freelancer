@@ -27,8 +27,31 @@
 
         @apply flex flex-col-reverse gap-5;
 
+        .MuiAccordionDetails-root.css-15v22id-MuiAccordionDetails-root {
+            @apply bg-zinc-100 border-t-2 border-green-500;
+
+            h3 {
+                @apply text-lg font-semibold mb-3;
+            }
+
+            ul {
+
+                @apply flex flex-col gap-3 justify-center;
+
+                li {
+                    @apply flex items-center gap-5;
+
+                    p {
+                        &:first-child {
+                            @apply text-base font-semibold py-1 px-3 bg-green-500 rounded-full text-white w-[120px];
+                        }
+                    }
+                }
+            }
+        }
+
         .gigItem {
-            @apply flex items-center gap-5 justify-between p-4 shadow-md rounded-xl;
+            @apply flex items-center gap-5 justify-between w-full;
 
             .gigItem__image {
                 @apply w-[120px] h-[120px] object-cover rounded-lg;
@@ -59,8 +82,22 @@
                             @apply bg-red-500 text-white;
                         }
                     }
+
+
                 }
             }
         }
+    }
+
+    .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiAccordion-root.MuiAccordion-rounded.MuiAccordion-gutters.css-1086bdv-MuiPaper-root-MuiAccordion-root {
+        @apply border-none rounded-xl w-full;
+
+        &::before {
+            @apply hidden;
+        }
+    }
+
+    .MuiAccordionSummary-content.MuiAccordionSummary-contentGutters.css-eqpfi5-MuiAccordionSummary-content {
+        @apply w-full;
     }
 }

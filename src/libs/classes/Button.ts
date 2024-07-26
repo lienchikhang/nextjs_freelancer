@@ -2,6 +2,10 @@ import http from "../http/http";
 import Cookies from "js-cookie";
 
 class ButtonObject {
+    /**
+     * 
+     * @returns true when loggedIn, false when not loggedIn
+     */
     public static async checkExpired(): Promise<boolean> {
 
         const cookieStore = Cookies.get('token');
