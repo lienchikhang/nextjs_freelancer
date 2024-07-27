@@ -81,6 +81,22 @@ const http = {
                     error: true,
                 }
             })
+    },
+
+    patchWithBody: (route: string, body: any) => {
+        return fetch(`http://localhost:8080/${route}`, {
+            method: 'PATCH',
+            credentials: "include",
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' },
+            body: JSON.stringify(body),
+        })
+            .then((res) => res.json())
+            .catch((err) => {
+                return {
+                    data: null,
+                    error: true,
+                }
+            })
     }
 }
 

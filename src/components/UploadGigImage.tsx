@@ -1,8 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
 import type { GetProp, UploadProps } from 'antd';
 import { message, Upload } from 'antd';
+import { useGigEdit } from '@/libs/contexts/gigEdit.content';
 
 const { Dragger } = Upload;
 
@@ -24,6 +25,14 @@ const UploadGigImage: React.FC<Props> = ({ handleSetImage }) => {
 
 
     const [img, setPlaceImg] = useState('');
+
+    const { gigEdit } = useGigEdit();
+
+    useEffect(() => {
+        if (gigEdit?.job_image) {
+            setPlaceImg(gigEdit?.job_image);
+        }
+    }, [])
 
     const props: UploadProps = {
         name: 'file',
@@ -50,8 +59,6 @@ const UploadGigImage: React.FC<Props> = ({ handleSetImage }) => {
             console.log('Dropped files', e.dataTransfer.files);
         },
     };
-
-    console.log({ img })
 
     return (
         <div className='gigImage'>

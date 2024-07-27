@@ -9,8 +9,9 @@ import { CloseOutlined } from '@ant-design/icons';
 import ButtonObject from '@/libs/classes/Button';
 import { useSession } from '@/libs/contexts/session.context';
 import { ToastContainer, toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useUser } from '@/libs/contexts/user.context';
+import { useGigEdit } from '@/libs/contexts/gigEdit.content';
 
 interface Input {
     jobName: string;
@@ -34,28 +35,56 @@ interface IOption {
 
 const CreateSection = () => {
 
-    const [input, setInput] = useState<Input>({
-        jobName: '',
-        jobDesc: '',
-    });
-    const [types, setTypes] = useState<any[]>([]);
-    const [typeValue, setValue] = useState<string>();
-    const [options, setOption] = useState<IOption[]>([
-        {
-            price: 0,
-            serviceDesc: "",
-            serviceBenefit: "",
-            deliveryDate: 1,
-            serviceLevel: "BASIC"
-        },
-    ])
+    const { gigEdit } = useGigEdit();
     const [form] = Form.useForm();
     const { handleExpired } = useSession();
-    const [isMaximumSer, setMaximum] = useState<boolean>(false);
-    const [level, setLevel] = useState(['BASIC', 'ADVANCED', 'PREMIUM']);
     const [imageUpload, setImage] = useState<any>(null);
     const { user } = useUser();
+    const path = usePathname();
     const route = useRouter();
+    const finalSegment = path.split('/')[3];
+    const [hasChange, setHasChange] = useState(false);
+    const [updatedBase, setUpdatedBase] = useState<any>(null);
+    const [updatedService, setUpdatedService] = useState<any[]>([]);
+    const [input, setInput] = useState<Input>({
+        jobName: gigEdit?.job_name || '',
+        jobDesc: gigEdit?.job_desc || '',
+    });
+    const [types, setTypes] = useState<any[]>([]);
+    const [typeValue, setValue] = useState<string | number>(
+        gigEdit?.subId || '',
+    );
+    const [options, setOption] = useState<IOption[]>(
+        gigEdit?.Services.map((service) => {
+            return {
+                price: service.price,
+                serviceDesc: service.service_desc,
+                serviceBenefit: service.service_benefit,
+                deliveryDate: service.delivery_date,
+                serviceLevel: service.service_level,
+            }
+        }) || [
+            {
+                price: 0,
+                serviceDesc: "",
+                serviceBenefit: "",
+                deliveryDate: 1,
+                serviceLevel: "BASIC"
+            },
+        ]
+    )
+    const [isMaximumSer, setMaximum] = useState<boolean>(false);
+    // const [level, setLevel] = useState(['BASIC', 'ADVANCED', 'PREMIUM']);
+
+    console.log({ options });
+    console.log({ types });
+    console.log({ input });
+    console.log({ finalSegment });
+    console.log({ updatedBase });
+    console.log({ gigEdit });
+    console.log({ updatedService });
+
+
 
     const notifySuccess = (mess: string) => {
         toast.success(mess);
@@ -64,7 +93,6 @@ const CreateSection = () => {
     const notifyError = (mess: string) => {
         toast.error(mess);
     }
-
 
     const onChange = (newValue: string) => {
         const sub = newValue.split(' ')[1];
@@ -78,8 +106,6 @@ const CreateSection = () => {
     const handleCreate = async () => {
         //check loggin expired
         const isNotExpired = await ButtonObject.checkExpired();
-
-        console.log('rs in btn create', isNotExpired);
 
         if (!isNotExpired) {
             handleExpired(true);
@@ -104,17 +130,10 @@ const CreateSection = () => {
             services: options,
         });
 
-        console.log('rs new gig', newJob);
-
         if (newJob.status == 201) {
 
             //delete all form
-
-            console.log('form', form);
-            console.log('imageee', imageUpload);
             const jobImage = await http.upload(`job/upload/${newJob.content.id}`, form);
-
-            console.log('rs gig image', jobImage);
 
             if (jobImage.status == 400) {
                 notifyError(jobImage.mess);
@@ -132,6 +151,64 @@ const CreateSection = () => {
             }
         }
 
+    }
+
+    const handleUpdate = async () => {
+        //khuc tren day ap dung khi OnChange
+        console.log('on update dclc')
+        //check has changed yet?
+
+        let hasChangedBase = false;
+        let hasChangedService = false;
+        let hasChangedImage = false;
+
+        //check gigName, gigDesc, type
+        if (input.jobName != gigEdit?.job_name) { hasChangedBase = true; setUpdatedBase({ ...updatedBase, jobName: input.jobName }) }
+        if (input.jobDesc != gigEdit?.job_desc) { hasChangedBase = true; setUpdatedBase({ ...updatedBase, jobDesc: input.jobDesc }) }
+        if (typeValue != gigEdit?.subId) { hasChangedBase = true; setUpdatedBase({ ...updatedBase, subId: +typeValue }) }
+
+        // check service
+        const lsServiceChanged = gigEdit?.Services.filter((service, idx: number) => {
+            return service.price != options[idx].price
+                || service.delivery_date != options[idx].deliveryDate
+                || service.service_benefit != options[idx].serviceBenefit
+                || service.service_level != options[idx].serviceLevel
+                || service.service_desc != options[idx].serviceDesc
+        });
+
+        // const rs2 = gigEdit?.Services.fo((service, idx: number) => {
+        //     return service.price != options[idx].price
+        //         || service.delivery_date != options[idx].deliveryDate
+        //         || service.service_benefit != options[idx].serviceBenefit
+        //         || service.service_level != options[idx].serviceLevel
+        //         || service.service_desc != options[idx].serviceDesc
+        // });
+
+        gigEdit?.Services.forEach((service, idx: number) => {
+            if (service.price != options[idx].price) {
+                hasChangedService = true;
+                const cloneUpdatedService = [...updatedService];
+                cloneUpdatedService[idx] = {
+                    ...cloneUpdatedService[idx],
+                    id: service.id,
+                    price: options[idx].price,
+                }
+                setUpdatedService(cloneUpdatedService);
+            }
+        })
+
+        if (lsServiceChanged?.length) hasChangedService = true;
+
+        //call api update
+        //case update base (name, desc, subId)
+        //khuc duoi giu lai khi handleUpdate
+        if (hasChangedBase) {
+            setHasChange(true);
+            const rs = http.patchWithBody(`job/update/${gigEdit?.id}`, updatedBase);
+
+            console.log('rs in handle update', rs);
+
+        }
     }
 
     const fetching = async () => {
@@ -152,7 +229,6 @@ const CreateSection = () => {
         }
     };
 
-    console.log({ options });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput({ ...input, [e.currentTarget.name]: e.currentTarget.value })
 
@@ -172,7 +248,7 @@ const CreateSection = () => {
                     <div className='gigForm'>
                         <FormControl isInvalid={isErrorGigName}>
                             <FormLabel>Gig Name</FormLabel>
-                            <Input type='text' name='jobName' value={input.jobName} onChange={handleInputChange} />
+                            <Input type='text' name='jobName' value={input.jobName.replaceAll('-', ' ')} onChange={handleInputChange} />
                             {!isErrorGigName ? (
                                 <FormHelperText>
                                     Enter the email you'd like to receive the newsletter on.
@@ -199,6 +275,13 @@ const CreateSection = () => {
                         <h2>Gig type:</h2>
                         <Cascader
                             style={{ width: '100%' }}
+                            defaultValue={
+                                [
+                                    `type ${gigEdit?.typeId}`,
+                                    `child ${gigEdit?.childTypeId}`,
+                                    `sub ${gigEdit?.subId}`,
+                                ]
+                            }
                             options={types.map((type: any) => {
                                 return {
                                     value: `type ${type.id}`,
@@ -234,11 +317,11 @@ const CreateSection = () => {
                         name="dynamic_form_complex"
                         style={{ width: '100%' }}
                         autoComplete="off"
-                        initialValues={{ items: [{}] }}
+                        initialValues={{ items: gigEdit?.Services }}
                     >
                         <Form.List name="items">
                             {(fields, { add, remove }) => {
-                                console.log({ fields });
+                                // console.log({ fields });
                                 return <div style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
                                     {fields.map((field) => {
                                         return <Card
@@ -364,7 +447,7 @@ const CreateSection = () => {
                                             <Form.Item label="Delivery date" name={[field.name, 'deliveryDate']}>
                                                 <FormControl isInvalid={options[field.name]?.deliveryDate === 0}>
 
-                                                    <Select name='deliveryDate' placeholder='Select date' onChange={(e) => {
+                                                    <Select name='deliveryDate' placeholder='Select date' defaultValue={options[field.name].deliveryDate} onChange={(e) => {
                                                         const updatedOptions = [...options];
                                                         updatedOptions[field.name] = {
                                                             ...updatedOptions[field.name],
@@ -415,7 +498,8 @@ const CreateSection = () => {
                         </Form.List>
                     </Form>
 
-                    <button className='final-btn' onClick={handleCreate}>Create Gig</button>
+                    {finalSegment.toLowerCase() == 'create' && <button className='final-btn' onClick={handleCreate}>Create Gig</button>}
+                    {finalSegment.toLowerCase() == 'edit' && <button className={`final-btn ${hasChange ? 'active' : ''}`} onClick={handleUpdate}>Update Gig</button>}
                 </div>
             </div >
         </React.Fragment>

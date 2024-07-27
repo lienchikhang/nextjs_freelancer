@@ -25,14 +25,21 @@ interface IGig {
     id: number,
     job_image: string,
     job_name: string,
+    job_desc: string,
     Services: {
         id: number,
         price: number,
-        service_level: string
+        serviceDesc: string,
+        serviceBenefit: string,
+        serviceLevel: string,
+        deliveryDate: 0,
     }[],
 }
 
 const ProfilePage: React.FC<Props> = ({ data }) => {
+
+    console.log('data in profilepaGE', data);
+
     const [gigs, setGigs] = useState<IGig[]>([]);
     const [isOpenAlert, setOpenAlert] = useState(false);
     const [deletedOne, setDeletedOne] = useState(0);

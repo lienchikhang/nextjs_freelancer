@@ -34,6 +34,10 @@ const LoginFacebook = () => {
                 body: JSON.stringify({ token: user.token, user: user.info }),
             });
         }
+
+        setTimeout(() => {
+            router.push('/search');
+        }, 1000)
     }, []);
 
     return (
