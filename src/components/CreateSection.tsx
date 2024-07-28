@@ -79,13 +79,11 @@ const CreateSection = () => {
     const [changedImage, setChangeImage] = useState(false);
     const router = useRouter();
 
-    console.log({ options });
-    console.log({ types });
-    console.log({ input });
-    console.log({ finalSegment });
-    console.log({ updatedBase });
+    // console.log({ options });
+    // console.log({ types });
+    // console.log({ input });
     console.log({ gigEdit });
-    console.log({ updatedService });
+    console.log({ imageUpload });
 
 
 
@@ -183,16 +181,21 @@ const CreateSection = () => {
     }
 
     const handleUpdate = async () => {
+
+        if (!gigEdit?.Services) return;
+
         //case update base (name, desc, subId)
         let finalUpdateBase = {};
         let finalUpdateService: any[] = [];
         let isSuccess = false;
+        let formImage = new FormData();
 
         if (input.jobName != gigEdit?.job_name) { finalUpdateBase = { ...finalUpdateBase, jobName: input.jobName } }
         if (input.jobDesc != gigEdit?.job_desc) { finalUpdateBase = { ...finalUpdateBase, jobDesc: input.jobDesc } }
         if (typeValue != gigEdit?.subId) { finalUpdateBase = { ...finalUpdateBase, subId: +typeValue } }
 
-        gigEdit?.Services.forEach((service, idx: number) => {
+        //case edit service == gigEdit
+        gigEdit.Services.length == options.length && gigEdit?.Services.forEach((service, idx: number) => {
             if (service.price != options[idx].price) {
                 const cloneUpdatedService = [...finalUpdateService];
                 cloneUpdatedService[idx] = {
@@ -249,6 +252,20 @@ const CreateSection = () => {
             }
         })
 
+        //case gigEdit's service > cur options (delete service)
+        if (gigEdit?.Services?.length > options.length) {
+            //in gigEdit Services, get the one which is not exist in options
+            //after that, call api delete it.
+            // set isSuccess = true
+        }
+
+        //case gigEdit's service < cur options (add new service)
+        if (gigEdit?.Services?.length < options.length) {
+            //in options Services, get the one which is not exist in gigEdit
+            //after that, call api add it.
+            // set isSuccess = true
+        }
+
         console.log('final update base', finalUpdateBase);
         console.log('final update service', finalUpdateService);
 
@@ -256,11 +273,9 @@ const CreateSection = () => {
             || finalUpdateBase.hasOwnProperty('jobDesc')
             || finalUpdateBase.hasOwnProperty('subId')
         ) {
-            console.log('gig id', gigEdit?.id);
             const rs = await http.patchWithBody(`job/update/${gigEdit?.id}`, finalUpdateBase);
 
-            console.log('rs in final update base', rs);
-
+            console.log('rs in update base', rs);
             if (rs.status === 200) {
                 isSuccess = true;
             }
@@ -280,6 +295,17 @@ const CreateSection = () => {
             else isSuccess = false;
         }
 
+        //case update image
+        if (imageUpload) {
+            formImage.append('file', imageUpload)
+
+            const rs = await http.upload(`job/upload/${gigEdit.id}`, formImage);
+
+            console.log('rs in update upload image', rs);
+
+            if (rs.status === 200) isSuccess = true;
+        }
+
         if (isSuccess) {
             //notify
             notifySuccess('Update successfully!');
@@ -287,7 +313,7 @@ const CreateSection = () => {
             //redirect
             setTimeout(() => {
                 router.push(`/profile/${user?.name}`);
-            }, 500)
+            }, 1000)
         }
     }
 
