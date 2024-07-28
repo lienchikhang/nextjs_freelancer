@@ -74,7 +74,10 @@ const CreateSection = () => {
         ]
     )
     const [isMaximumSer, setMaximum] = useState<boolean>(false);
-    // const [level, setLevel] = useState(['BASIC', 'ADVANCED', 'PREMIUM']);
+    const [changedBase, setChangeBase] = useState(false);
+    const [changedService, setChangeService] = useState(false);
+    const [changedImage, setChangeImage] = useState(false);
+    const router = useRouter();
 
     console.log({ options });
     console.log({ types });
@@ -153,40 +156,21 @@ const CreateSection = () => {
 
     }
 
-    const handleUpdate = async () => {
-        //khuc tren day ap dung khi OnChange
-        console.log('on update dclc')
-        //check has changed yet?
-
+    const handleCheckChangedBase = () => {
         let hasChangedBase = false;
-        let hasChangedService = false;
-        let hasChangedImage = false;
 
         //check gigName, gigDesc, type
         if (input.jobName != gigEdit?.job_name) { hasChangedBase = true; setUpdatedBase({ ...updatedBase, jobName: input.jobName }) }
         if (input.jobDesc != gigEdit?.job_desc) { hasChangedBase = true; setUpdatedBase({ ...updatedBase, jobDesc: input.jobDesc }) }
         if (typeValue != gigEdit?.subId) { hasChangedBase = true; setUpdatedBase({ ...updatedBase, subId: +typeValue }) }
 
-        // check service
-        const lsServiceChanged = gigEdit?.Services.filter((service, idx: number) => {
-            return service.price != options[idx].price
-                || service.delivery_date != options[idx].deliveryDate
-                || service.service_benefit != options[idx].serviceBenefit
-                || service.service_level != options[idx].serviceLevel
-                || service.service_desc != options[idx].serviceDesc
-        });
+        if (hasChangedBase) setChangeBase(true)
+        else setChangeBase(false)
+    }
 
-        // const rs2 = gigEdit?.Services.fo((service, idx: number) => {
-        //     return service.price != options[idx].price
-        //         || service.delivery_date != options[idx].deliveryDate
-        //         || service.service_benefit != options[idx].serviceBenefit
-        //         || service.service_level != options[idx].serviceLevel
-        //         || service.service_desc != options[idx].serviceDesc
-        // });
-
+    const handleCheckChangedService = () => {
         gigEdit?.Services.forEach((service, idx: number) => {
             if (service.price != options[idx].price) {
-                hasChangedService = true;
                 const cloneUpdatedService = [...updatedService];
                 cloneUpdatedService[idx] = {
                     ...cloneUpdatedService[idx],
@@ -196,18 +180,114 @@ const CreateSection = () => {
                 setUpdatedService(cloneUpdatedService);
             }
         })
+    }
 
-        if (lsServiceChanged?.length) hasChangedService = true;
-
-        //call api update
+    const handleUpdate = async () => {
         //case update base (name, desc, subId)
-        //khuc duoi giu lai khi handleUpdate
-        if (hasChangedBase) {
-            setHasChange(true);
-            const rs = http.patchWithBody(`job/update/${gigEdit?.id}`, updatedBase);
+        let finalUpdateBase = {};
+        let finalUpdateService: any[] = [];
+        let isSuccess = false;
 
-            console.log('rs in handle update', rs);
+        if (input.jobName != gigEdit?.job_name) { finalUpdateBase = { ...finalUpdateBase, jobName: input.jobName } }
+        if (input.jobDesc != gigEdit?.job_desc) { finalUpdateBase = { ...finalUpdateBase, jobDesc: input.jobDesc } }
+        if (typeValue != gigEdit?.subId) { finalUpdateBase = { ...finalUpdateBase, subId: +typeValue } }
 
+        gigEdit?.Services.forEach((service, idx: number) => {
+            if (service.price != options[idx].price) {
+                const cloneUpdatedService = [...finalUpdateService];
+                cloneUpdatedService[idx] = {
+                    ...cloneUpdatedService[idx],
+                    id: service.id,
+                    price: +options[idx].price,
+                }
+                // setUpdatedService(cloneUpdatedService);
+                finalUpdateService = [...cloneUpdatedService];
+            }
+
+            if (service.service_benefit != options[idx].serviceBenefit) {
+                const cloneUpdatedService = [...finalUpdateService];
+                cloneUpdatedService[idx] = {
+                    ...cloneUpdatedService[idx],
+                    id: service.id,
+                    serviceBenefit: options[idx].serviceBenefit,
+                }
+                // setUpdatedService(cloneUpdatedService);
+                finalUpdateService = [...cloneUpdatedService];
+            }
+
+            if (service.service_desc != options[idx].serviceDesc) {
+                const cloneUpdatedService = [...finalUpdateService];
+                cloneUpdatedService[idx] = {
+                    ...cloneUpdatedService[idx],
+                    id: service.id,
+                    serviceDesc: options[idx].serviceDesc,
+                }
+                // setUpdatedService(cloneUpdatedService);
+                finalUpdateService = [...cloneUpdatedService];
+            }
+
+            if (service.service_level != options[idx].serviceLevel) {
+                const cloneUpdatedService = [...finalUpdateService];
+                cloneUpdatedService[idx] = {
+                    ...cloneUpdatedService[idx],
+                    id: service.id,
+                    serviceLevel: options[idx].serviceLevel,
+                }
+                // setUpdatedService(cloneUpdatedService);
+                finalUpdateService = [...cloneUpdatedService];
+            }
+
+            if (service.delivery_date != options[idx].deliveryDate) {
+                const cloneUpdatedService = [...finalUpdateService];
+                cloneUpdatedService[idx] = {
+                    ...cloneUpdatedService[idx],
+                    id: service.id,
+                    deliveryDate: +options[idx].deliveryDate,
+                }
+                // setUpdatedService(cloneUpdatedService);
+                finalUpdateService = [...cloneUpdatedService];
+            }
+        })
+
+        console.log('final update base', finalUpdateBase);
+        console.log('final update service', finalUpdateService);
+
+        if (finalUpdateBase.hasOwnProperty('jobName')
+            || finalUpdateBase.hasOwnProperty('jobDesc')
+            || finalUpdateBase.hasOwnProperty('subId')
+        ) {
+            console.log('gig id', gigEdit?.id);
+            const rs = await http.patchWithBody(`job/update/${gigEdit?.id}`, finalUpdateBase);
+
+            console.log('rs in final update base', rs);
+
+            if (rs.status === 200) {
+                isSuccess = true;
+            }
+        }
+
+        if (finalUpdateService.length) {
+
+            const promiseUpdateServices = finalUpdateService.map(async (upSer) => await http.patchWithBody(`service/update/${upSer.id}`, upSer));
+
+            const rs = await Promise.all(promiseUpdateServices);
+
+            console.log('rs in final update service', rs);
+
+            const isUpdateSuccess = rs.every((r) => r.status === 200);
+
+            if (isUpdateSuccess) isSuccess = true;
+            else isSuccess = false;
+        }
+
+        if (isSuccess) {
+            //notify
+            notifySuccess('Update successfully!');
+
+            //redirect
+            setTimeout(() => {
+                router.push(`/profile/${user?.name}`);
+            }, 500)
         }
     }
 
@@ -217,6 +297,7 @@ const CreateSection = () => {
     }
 
     const onCasChange = (value: any, selectedOptions: any) => {
+        handleCheckChangedBase();
         // Extract the selected node information
         const isChildNode = selectedOptions?.length === 3; // We want only to select a leaf node
         if (isChildNode) {
@@ -230,7 +311,19 @@ const CreateSection = () => {
     };
 
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput({ ...input, [e.currentTarget.name]: e.currentTarget.value })
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (finalSegment == 'edit') {
+            setChangeBase(true);
+            setInput({ ...input, [e.currentTarget.name]: e.currentTarget.value });
+        } else {
+            setChangeBase(false);
+            setInput({ ...input, [e.currentTarget.name]: e.currentTarget.value });
+        }
+    }
+
+    useEffect(() => {
+        setUpdatedBase({ ...updatedBase, })
+    }, [])
 
     const isErrorGigName = input.jobName === '';
     const isErrorGigDesc = input.jobDesc === '';
@@ -356,6 +449,7 @@ const CreateSection = () => {
                                             <Form.Item label="Service Description" name={[field.name, 'serviceDesc']}>
                                                 <FormControl isInvalid={options[field.name]?.serviceDesc === ''}>
                                                     <Textarea name='serviceDesc' value={options[field.name]?.serviceDesc} onChange={(e) => {
+                                                        handleCheckChangedService();
                                                         const updatedOptions = [...options];
                                                         updatedOptions[field.name] = {
                                                             ...updatedOptions[field.name],
@@ -376,6 +470,7 @@ const CreateSection = () => {
                                             <Form.Item label="Service price" name={[field.name, 'price']}>
                                                 <FormControl isInvalid={options[field.name]?.price === 0 || options[field.name]?.price <= 0}>
                                                     <Input type='number' name='price' value={options[field.name]?.price} onChange={(e) => {
+                                                        handleCheckChangedService();
                                                         const updatedOptions = [...options];
                                                         updatedOptions[field.name] = {
                                                             ...updatedOptions[field.name],
@@ -396,6 +491,7 @@ const CreateSection = () => {
                                             <Form.Item label="Service benefit" name={[field.name, 'serviceBenefit']}>
                                                 <FormControl isInvalid={options[field.name]?.serviceBenefit === ''}>
                                                     <Textarea name='serviceBenefit' value={options[field.name]?.serviceBenefit} onChange={(e) => {
+                                                        handleCheckChangedService();
                                                         const updatedOptions = [...options];
                                                         updatedOptions[field.name] = {
                                                             ...updatedOptions[field.name],
@@ -448,6 +544,7 @@ const CreateSection = () => {
                                                 <FormControl isInvalid={options[field.name]?.deliveryDate === 0}>
 
                                                     <Select name='deliveryDate' placeholder='Select date' defaultValue={options[field.name].deliveryDate} onChange={(e) => {
+                                                        handleCheckChangedService();
                                                         const updatedOptions = [...options];
                                                         updatedOptions[field.name] = {
                                                             ...updatedOptions[field.name],
