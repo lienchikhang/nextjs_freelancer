@@ -1,22 +1,70 @@
 'use client';
-import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import '../styles/gigOwnList.scss';
 import GigItem from './GigItem';
+import { Pagination, Stack } from '@mui/material';
+import { useUser } from '@/libs/contexts/user.context';
+import http from '@/libs/http/http';
+import ButtonObject from '@/libs/classes/Button';
+import { useSession } from '@/libs/contexts/session.context';
 
 interface Props {
     data: any[];
+    page: number;
     handleDelete: (gigId: number) => void;
+    handleChangePage: (event: React.ChangeEvent<unknown>, value: number) => void;
 }
 
-const UserGig: React.FC<Props> = ({ data, handleDelete }) => {
+const UserGig: React.FC<Props> = ({ data, page, handleDelete, handleChangePage }) => {
 
     const router = useRouter();
     const path = usePathname();
+    const { handleExpired } = useSession();
+    const params = useSearchParams();
+    const { user } = useUser();
+    const [nextGigs, setNextGigs] = useState<any[]>([]);
 
-    const handleClick = () => {
+    useEffect(() => {
+        console.log('data in first useEff', data);
+        setNextGigs(data);
+    }, [])
+
+    // useEffect(() => {
+    //     if (params.get('page')) {
+    //         const page = params.get('page');
+    //         const fetching = async () => {
+    //             const rs = await http.get(`hire/get-all-by-seller?page=${page}`);
+    //             if (rs.status == 200) {
+    //                 setNextGigs(rs.content.jobs);
+    //             }
+    //         }
+
+    //         fetching();
+    //     }
+
+    // }, [params.get('page')]);
+
+    const handleClick = async () => {
+        const isLoggedIn = await ButtonObject.checkExpired();
+
+        if (!isLoggedIn) {
+            handleExpired(true);
+            return;
+        }
+
         router.push(`${path}/create`);
     }
+
+    // const handleChange = async (event: React.ChangeEvent<unknown>, value: number) => {
+    //     const isLoggedIn = await ButtonObject.checkExpired();
+
+    //     if (!isLoggedIn) {
+    //         handleExpired(true);
+    //         return;
+    //     }
+    //     router.push(`?page=${value}`);
+    // };
 
     if (!data.length) {
         return <div className='registerSeller__wrapper'>
@@ -48,6 +96,9 @@ const UserGig: React.FC<Props> = ({ data, handleDelete }) => {
                     })
                 }
             </div>
+            <Stack spacing={2} className='mt-8'>
+                <Pagination count={page} size="large" onChange={handleChangePage} />
+            </Stack>
         </div>
     )
 }

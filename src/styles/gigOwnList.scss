@@ -25,7 +25,7 @@
 
     .userGig__list {
 
-        @apply flex flex-col-reverse gap-5;
+        @apply flex flex-col gap-5 min-h-[800px];
 
         .MuiAccordionDetails-root.css-15v22id-MuiAccordionDetails-root {
             @apply bg-zinc-100 border-t-2 border-green-500;

@@ -8,7 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ChakraProvider, useDisclosure } from '@chakra-ui/react';
 import SessionExpired from './SessionExpired';
 import http from '@/libs/http/http';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import ButtonObject from '@/libs/classes/Button';
+import { useSession } from '@/libs/contexts/session.context';
 
 interface IResponse {
     status: number,
@@ -43,10 +45,39 @@ const ProfilePage: React.FC<Props> = ({ data }) => {
     const [gigs, setGigs] = useState<IGig[]>([]);
     const [isOpenAlert, setOpenAlert] = useState(false);
     const [deletedOne, setDeletedOne] = useState(0);
-    useEffect(() => {
-        setGigs(data[3].content);
-    }, [])
+    const [totalPage, setTotalPage] = useState(0);
+    const path = usePathname();
+    const params = useSearchParams();
+    const { handleExpired } = useSession();
+    const router = useRouter();
     const cancelRef = React.useRef(null);
+
+
+    useEffect(() => {
+        setGigs(data[3].content.jobs);
+        setTotalPage(data[3].content.page)
+    }, []);
+
+    useEffect(() => {
+        if (params.get('page')) {
+            const page = params.get('page') as string;
+
+            if (page != '1') {
+                const fetching = async () => {
+                    const rs = await http.get(`hire/get-all-by-seller?page=${page}`);
+                    if (rs.status == 200) {
+                        setGigs(rs.content.jobs);
+                    }
+                }
+
+                fetching();
+            } else {
+                setGigs(data[3].content.jobs);
+            }
+        }
+
+    }, [params.get('page')])
+
     const notifySuccess = (mess: string) => toast.success(mess, {
         position: "bottom-center",
         transition: Flip,
@@ -56,6 +87,16 @@ const ProfilePage: React.FC<Props> = ({ data }) => {
         setOpenAlert(true);
         setDeletedOne(gigId);
     }
+
+    const handleChangePage = async (event: React.ChangeEvent<unknown>, value: number) => {
+        const isLoggedIn = await ButtonObject.checkExpired();
+
+        if (!isLoggedIn) {
+            handleExpired(true);
+            return;
+        }
+        router.push(`?page=${value}`);
+    };
 
     const handleCloseAlert = () => {
         setOpenAlert(false);
@@ -138,7 +179,7 @@ const ProfilePage: React.FC<Props> = ({ data }) => {
                             <h2>Your job</h2>
                         </div>
                         {data[3].status == 403 && <RegisterSeller notifySuccess={notifySuccess} />}
-                        {data[3].status == 200 && <UserGig data={gigs} handleDelete={handleOpenAlert} />}
+                        {data[3].status == 200 && <UserGig data={gigs} page={totalPage} handleDelete={handleOpenAlert} handleChangePage={handleChangePage} />}
                     </div>
                 </div>
             </div>

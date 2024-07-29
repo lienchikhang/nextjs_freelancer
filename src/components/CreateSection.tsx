@@ -283,7 +283,9 @@ const CreateSection = () => {
 
         if (finalUpdateService.length) {
 
-            const promiseUpdateServices = finalUpdateService.map(async (upSer) => await http.patchWithBody(`service/update/${upSer.id}`, upSer));
+            //filter services which are changed
+            const filterUpdateServices = finalUpdateService.filter((upSer) => upSer != undefined);
+            const promiseUpdateServices = filterUpdateServices.map(async (upSer) => await http.patchWithBody(`service/update/${upSer.id}`, upSer));
 
             const rs = await Promise.all(promiseUpdateServices);
 
