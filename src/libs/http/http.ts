@@ -15,9 +15,11 @@ const http = {
                 return res.json()
             })
             .catch((err) => {
+                console.log('err', err);
                 return {
                     data: null,
                     error: true,
+                    status: err.status,
                 }
             })
     },

@@ -42,9 +42,19 @@ const Navbar: React.FC = () => {
 
     const handleProfile = async () => {
         const isNotExpired = await ButtonObject.checkExpired();
-        console.log('isPass', isNotExpired);
         if (isNotExpired) {
             router.push(`/profile/${user?.name}`)
+            handleExpired(false);
+            handleClose();
+        } else {
+            handleExpired(true);
+        }
+    }
+
+    const handleOrder = async () => {
+        const isNotExpired = await ButtonObject.checkExpired();
+        if (isNotExpired) {
+            router.push(`/profile/${user?.name}/orders`)
             handleExpired(false);
             handleClose();
         } else {
@@ -143,7 +153,7 @@ const Navbar: React.FC = () => {
                                 <MenuItem onClick={handleProfile}>
                                     Profile
                                 </MenuItem>
-                                <MenuItem onClick={handleClose}>
+                                <MenuItem onClick={handleOrder}>
                                     Orders
                                 </MenuItem>
                                 <Divider />

@@ -54,12 +54,14 @@ const ProfilePage: React.FC<Props> = ({ data }) => {
 
 
     useEffect(() => {
-        setGigs(data[3].content.jobs);
-        setTotalPage(data[3].content.page)
+        if (data[3].status == 200) {
+            setGigs(data[3].content.jobs);
+            setTotalPage(data[3].content.page)
+        }
     }, []);
 
     useEffect(() => {
-        if (params.get('page')) {
+        if (data[3].status == 200 && params.get('page')) {
             const page = params.get('page') as string;
 
             if (page != '1') {

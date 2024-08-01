@@ -1,0 +1,63 @@
+.page__wrapper {
+    background-color: #f7f7f7;
+
+    .order__wrapper {
+        @apply w-[92%] mx-auto py-28 grid grid-cols-12 gap-10;
+
+        .progress__wrapper {
+            @apply col-span-4 sticky top-24 h-[400px] bg-white rounded-lg p-6 flex flex-col justify-center items-center;
+
+            h2 {
+                @apply text-xl font-semibold mb-4;
+            }
+
+            p {
+                @apply text-lg font-medium mb-4;
+            }
+        }
+
+        .list__wrapper {
+            @apply col-span-8 bg-white rounded-lg p-6;
+        }
+
+        .orders {
+            @apply flex flex-col items-center gap-10;
+        }
+
+        .orderItem__wrapper {
+            @apply border w-full rounded-lg;
+
+            .btn__section {
+                @apply w-full flex items-center justify-between gap-8 p-4 border-t;
+
+                button {
+                    @apply w-1/2 px-6 py-2 border border-green-500 font-semibold rounded-md transition-all cursor-pointer;
+
+                    &:first-child {
+                        @apply text-green-500 bg-transparent;
+
+                        &:hover {
+                            @apply bg-green-500 text-white;
+                        }
+                    }
+
+                    &:last-child {
+                        @apply text-white bg-green-500;
+
+                        &:hover {
+                            @apply bg-green-400;
+                        }
+
+                        &.unactive {
+                            @apply bg-zinc-100 border-zinc-200 cursor-not-allowed text-zinc-500;
+                        }
+                    }
+                }
+            }
+        }
+
+        .MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary.css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+            @apply w-1/2 flex-1;
+        }
+    }
+}
