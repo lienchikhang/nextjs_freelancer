@@ -46,6 +46,14 @@
                             @apply text-base font-semibold py-1 px-3 bg-green-500 rounded-full text-white w-[120px];
                         }
                     }
+
+                    button {
+                        @apply px-4 py-1 bg-blue-600 text-white font-semibold rounded-full transition-all;
+
+                        &:hover {
+                            @apply bg-blue-400;
+                        }
+                    }
                 }
             }
         }

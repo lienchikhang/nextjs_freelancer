@@ -74,6 +74,17 @@ const GigItem: React.FC<Props> = ({ data, handleAlertDelete }) => {
         handleAlertDelete(data.id);
     }
 
+    const handleViewOrders = async (serviceId: number) => {
+        const isNotExpired = await ButtonObject.checkExpired();
+
+        if (!isNotExpired) {
+            handleExpired(true);
+            return;
+        }
+
+        router.push(`${user?.name}/services?id=${serviceId}&page=1`);
+    }
+
     return (
         <Accordion>
             <AccordionSummary
@@ -97,9 +108,11 @@ const GigItem: React.FC<Props> = ({ data, handleAlertDelete }) => {
                 <ul>
                     {
                         data.Services.map((service, idx: number) => {
+                            console.log(`service + ${idx}`, service)
                             return <li key={idx}>
                                 <p>{service.service_level}</p>
                                 <p>{service.price.toLocaleString()} VND</p>
+                                <button onClick={() => handleViewOrders(service.id)}>View all orders</button>
                             </li>
                         })
                     }

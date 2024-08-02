@@ -62,6 +62,17 @@ const Navbar: React.FC = () => {
         }
     }
 
+    const handleServices = async () => {
+        const isNotExpired = await ButtonObject.checkExpired();
+        if (isNotExpired) {
+            router.push(`/profile/${user?.name}/services`)
+            handleExpired(false);
+            handleClose();
+        } else {
+            handleExpired(true);
+        }
+    }
+
     const handleLogout = () => {
         logout();
         window.location.reload();
@@ -155,6 +166,9 @@ const Navbar: React.FC = () => {
                                 </MenuItem>
                                 <MenuItem onClick={handleOrder}>
                                     Orders
+                                </MenuItem>
+                                <MenuItem onClick={handleServices}>
+                                    Services
                                 </MenuItem>
                                 <Divider />
                                 <MenuItem onClick={handleClose}>

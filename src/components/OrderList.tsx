@@ -9,6 +9,7 @@ import http from '@/libs/http/http';
 import ButtonObject from '@/libs/classes/Button';
 import { useSession } from '@/libs/contexts/session.context';
 import { reduceString } from '@/libs/funcs/reduceString';
+import JobListNotFound from './JobListNotFound';
 
 interface Props {
     // data: IOrderList[],
@@ -59,6 +60,7 @@ const OrderList: React.FC<Props> = ({ notifySuccess }) => {
 
         if (rs.status == 200) {
             notifySuccess(rs.mess);
+            router.refresh();
         }
     }
 
@@ -72,6 +74,10 @@ const OrderList: React.FC<Props> = ({ notifySuccess }) => {
         </div>
     }
 
+    if (!orderList.length) {
+        return <JobListNotFound mess="You don't have any orders. Please place one!" />
+    }
+
     return (
         <div className='orders'>
             {
@@ -82,25 +88,27 @@ const OrderList: React.FC<Props> = ({ notifySuccess }) => {
                             <Tag color="green">{order?.id}</Tag>
                         </div>
                         <div>
-                            <table className='w-full table-auto border-separate border-spacing-3 '>
-                                <thead className='border-separate'>
+                            <table className='w-full border border-gray-200 border-collapse'>
+                                <thead >
                                     <tr className='text-start'>
-                                        <th className=''>Job Image</th>
-                                        <th>Job Name</th>
-                                        <th>Service Level</th>
-                                        <th>Price</th>
-                                        <th>Status</th>
+                                        <th className='w-1/3 py-3 px-4 border uppercase font-semibold text-sm text-start'>Job Image</th>
+                                        <th className='w-1/3 py-3 px-4 border uppercase font-semibold text-sm text-start'>Job Name</th>
+                                        <th className='w-1/3 py-3 px-4 border uppercase font-semibold text-sm text-start'>Service Level</th>
+                                        <th className='w-1/3 py-3 px-4 border uppercase font-semibold text-sm text-start'>Price</th>
+                                        <th className='w-1/3 py-3 px-4 border uppercase font-semibold text-sm text-start'>Seller Confirm</th>
+                                        <th className='w-1/3 py-3 px-4 border uppercase font-semibold text-sm text-start'>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className='border'>
+                                <tbody >
                                     <tr>
-                                        <td>
+                                        <td className='w-1/3 py-3 px-4 border border-gray-200'>
                                             <Image src={order?.Services?.Jobs?.job_image} width={100} height={100} alt='image' />
                                         </td>
-                                        <td>{reduceString(order?.Services?.Jobs?.job_name.replaceAll('-', ' '))}</td>
-                                        <td>{order?.Services?.service_level}</td>
-                                        <td>{order?.price.toLocaleString()}</td>
-                                        <td>{order?.isDone ? <Tag color="green">Done</Tag> : <Tag color="red">Not Done</Tag>}</td>
+                                        <td className='w-1/3 py-3 px-4 border border-gray-200'>{reduceString(order?.Services?.Jobs?.job_name.replaceAll('-', ' '))}</td>
+                                        <td className='w-1/3 py-3 px-4 border border-gray-200'>{order?.Services?.service_level}</td>
+                                        <td className='w-1/3 py-3 px-4 border border-gray-200'>{order?.price.toLocaleString()}</td>
+                                        <td className='w-1/3 py-3 px-4 border border-gray-200'>{order?.isDone ? <Tag color="green">Done</Tag> : <Tag color="red">Not Done</Tag>}</td>
+                                        <td className='w-1/3 py-3 px-4 border border-gray-200'>{order?.user_confirm ? <Tag color="green">Done</Tag> : <Tag color="red">Not Done</Tag>}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -108,7 +116,7 @@ const OrderList: React.FC<Props> = ({ notifySuccess }) => {
                         <div className='btn__section'>
                             <button>Detail</button>
                             {
-                                (order.isDone == false && order.user_confirm == false)
+                                (order.isDone == false || order.user_confirm == false)
                                 && <Tooltip title='Can only enable when order status is done'>
                                     <button
                                         disabled={!order.isDone}

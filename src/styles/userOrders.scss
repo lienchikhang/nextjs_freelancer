@@ -31,7 +31,7 @@
                 @apply w-full flex items-center justify-between gap-8 p-4 border-t;
 
                 button {
-                    @apply w-1/2 px-6 py-2 border border-green-500 font-semibold rounded-md transition-all cursor-pointer;
+                    @apply w-1/2 flex-1 px-6 py-2 border border-green-500 font-semibold rounded-md transition-all cursor-pointer;
 
                     &:first-child {
                         @apply text-green-500 bg-transparent;

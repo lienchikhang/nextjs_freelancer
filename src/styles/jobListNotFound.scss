@@ -1,0 +1,12 @@
+.jobList__notfound {
+
+    @apply w-1/4 mx-auto flex flex-col justify-center items-center mt-8;
+
+    svg {
+        @apply w-[158px] mb-4;
+    }
+
+    h2 {
+        @apply text-center py-5 text-xl font-semibold;
+    }
+}

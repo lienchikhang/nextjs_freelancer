@@ -13,33 +13,40 @@ import ButtonBudget from './ButtonBudget';
 
 const JobList = () => {
 
+    //total page
     const [page, setPage] = useState(1);
-    const [curPage, setCurPage] = useState(1);
+    // const [curPage, setCurPage] = useState(1);
     const [jobs, setJob] = useState<IJob[] | null>();
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
     const pathname = usePathname();
     const query = useSearchParams();
+    const router = useRouter();
+    const currentPage = query.get('page');
 
+    // console.log({ currentPage })
+    // console.log({ pathname })
+    // console.log({ query: query.toString() })
     const fetchData = useCallback(async (route: string) => {
         return http.get(route);
     }, [])
 
     const handleChangePage = useCallback((event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value);
+        // setPage(value);
+        router.push(pathname + `?page=${value}`);
     }, [])
 
     // console.log({ searchParams, pathname, query: query.toString() })
 
 
     useEffect(() => {
-        fetchData(`job/get-all?page=${curPage}&${query.toString()}`)
+        fetchData(`job/get-all?${query.toString()}`)
             .then((res) => {
                 if (res.status == 200) {
                     setJob(res.content.data);
                     setPage(res.content.page);
                 }
             });
-    }, [query.toString(), curPage,]);
+    }, [query.toString(),]);
 
     return (
         <section className='jobList__wrapper'>
@@ -53,7 +60,7 @@ const JobList = () => {
                     : <JobListNotFound />
             }
             <div className='jobList__pagination'>
-                {jobs && jobs.length != 0 && <Pagination count={page ? page : 1} variant="text" size="large" onChange={handleChangePage} />}
+                {jobs && jobs.length != 0 && <Pagination page={currentPage ? +currentPage : 1} count={5} variant="text" size="large" onChange={handleChangePage} />}
             </div>
         </section>
     )

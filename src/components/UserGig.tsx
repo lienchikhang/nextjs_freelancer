@@ -8,42 +8,105 @@ import { useUser } from '@/libs/contexts/user.context';
 import http from '@/libs/http/http';
 import ButtonObject from '@/libs/classes/Button';
 import { useSession } from '@/libs/contexts/session.context';
+import JobListNotFound from './JobListNotFound';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ChakraProvider, useDisclosure } from '@chakra-ui/react';
+import SessionExpired from './SessionExpired';
+import { Flip, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import RegisterSeller from './RegisterSeller';
+
+
 
 interface Props {
-    data: any[];
-    page: number;
-    handleDelete: (gigId: number) => void;
-    handleChangePage: (event: React.ChangeEvent<unknown>, value: number) => void;
+    // data: any[];
+    // page: number;
+    // handleDelete: (gigId: number) => void;
+    // handleChangePage: (event: React.ChangeEvent<unknown>, value: number) => void;
 }
 
-const UserGig: React.FC<Props> = ({ data, page, handleDelete, handleChangePage }) => {
+interface IGig {
+    id: number,
+    job_image: string,
+    job_name: string,
+    job_desc: string,
+    sub_id: number,
+    Services: {
+        id: number,
+        price: number,
+        service_desc: string,
+        service_benefit: string,
+        service_level: string,
+        delivery_date: 0,
+    }[],
+    Subs: {
+        ChildTypes: {
+            type_id: number,
+            id: number,
+        },
+        // child_type_id: number,
+    }
+}
 
+const UserGig: React.FC<Props> = ({ }) => {
+
+    const [page, setPage] = useState(0);
     const router = useRouter();
     const path = usePathname();
     const { handleExpired } = useSession();
-    const params = useSearchParams();
+    const query = useSearchParams();
     const { user } = useUser();
-    const [nextGigs, setNextGigs] = useState<any[]>([]);
+    const [gigs, setGigs] = useState<IGig[] | null>(null);
+    const [isOpenAlert, setOpenAlert] = useState(false);
+    const [deletedOne, setDeletedOne] = useState(0);
+    const [isNotSeller, setNotSeller] = useState(false);
+    const cancelRef = React.useRef(null);
+
+    const curPage = query.get('page');
 
     useEffect(() => {
-        console.log('data in first useEff', data);
-        setNextGigs(data);
-    }, [])
+        const fetching = async () => {
+            const rs = await http.get(`hire/get-all-by-seller?page=${curPage ? +curPage : 1}`);
 
-    // useEffect(() => {
-    //     if (params.get('page')) {
-    //         const page = params.get('page');
-    //         const fetching = async () => {
-    //             const rs = await http.get(`hire/get-all-by-seller?page=${page}`);
-    //             if (rs.status == 200) {
-    //                 setNextGigs(rs.content.jobs);
-    //             }
-    //         }
+            console.log('rs in fetching userGig', rs);
+            if (rs.status == 200) {
+                setGigs(rs.content.jobs);
+                setPage(rs.content.page);
+            } else if (rs.status === 403) {
+                setNotSeller(true);
+            } else {
+                setGigs(null);
+            }
+        }
+        fetching();
+    }, [curPage]);
 
-    //         fetching();
-    //     }
+    if (!gigs) {
+        return <h1>Something is wrong!</h1>
+    }
 
-    // }, [params.get('page')]);
+    const notifySuccess = (mess: string) => toast.success(mess, {
+        position: "bottom-center",
+        transition: Flip,
+    });
+
+    const handleChangePage = async (event: React.ChangeEvent<unknown>, value: number) => {
+        const isLoggedIn = await ButtonObject.checkExpired();
+
+        if (!isLoggedIn) {
+            handleExpired(true);
+            return;
+        }
+        router.push(`?page=${value}`);
+    };
+
+    const handleOpenAlert = (gigId: number) => {
+        setOpenAlert(true);
+        setDeletedOne(gigId);
+    }
+
+    const handleCloseAlert = () => {
+        setOpenAlert(false);
+    }
 
     const handleClick = async () => {
         const isLoggedIn = await ButtonObject.checkExpired();
@@ -56,17 +119,28 @@ const UserGig: React.FC<Props> = ({ data, page, handleDelete, handleChangePage }
         router.push(`${path}/create`);
     }
 
-    // const handleChange = async (event: React.ChangeEvent<unknown>, value: number) => {
-    //     const isLoggedIn = await ButtonObject.checkExpired();
+    const handleDelete = async () => {
+        if (deletedOne) {
+            const rs = await http.patch(`job/delete/${deletedOne}`);
 
-    //     if (!isLoggedIn) {
-    //         handleExpired(true);
-    //         return;
-    //     }
-    //     router.push(`?page=${value}`);
-    // };
+            // console.log('rss in delete gig', rs);
+            if (rs.status == 200) {
+                notifySuccess(rs.mess);
+                //remove gig
+                const newGigs = gigs.filter((gig: IGig) => {
+                    return gig.id != deletedOne;
+                });
 
-    if (!data.length) {
+                setGigs(newGigs);
+            }
+        }
+    }
+
+    if (isNotSeller) {
+        return <RegisterSeller notifySuccess={notifySuccess} />
+    }
+
+    if (!gigs.length) {
         return <div className='registerSeller__wrapper'>
             <div className='registerSeller__main'>
                 <div>
@@ -79,27 +153,63 @@ const UserGig: React.FC<Props> = ({ data, page, handleDelete, handleChangePage }
     }
 
     return (
-        <div className='userGig__wrapper'>
-            <div className="userGig__navbar">
-                <div>
-                    <h3>Gigs</h3>
+        <React.Fragment>
+            <ChakraProvider>
+                <AlertDialog
+                    isOpen={isOpenAlert}
+                    leastDestructiveRef={cancelRef}
+                    onClose={handleCloseAlert}
+                >
+                    <AlertDialogOverlay>
+                        <AlertDialogContent>
+                            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                Delete Customer
+                            </AlertDialogHeader>
+
+                            <AlertDialogBody>
+                                Are you sure deleting {deletedOne}? You can't undo this action afterwards.
+                            </AlertDialogBody>
+
+                            <AlertDialogFooter>
+                                <Button ref={cancelRef} onClick={handleCloseAlert}>
+                                    Cancel
+                                </Button>
+                                <Button colorScheme='red' onClick={() => {
+                                    handleCloseAlert();
+                                    //delete
+                                    handleDelete();
+                                }} ml={3}>
+                                    Delete
+                                </Button>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialogOverlay>
+                </AlertDialog>
+                <SessionExpired />
+            </ChakraProvider>
+            <ToastContainer />
+            <div className='userGig__wrapper'>
+                <div className="userGig__navbar">
+                    <div>
+                        <h3>Gigs</h3>
+                    </div>
+                    <div className='userGig__btns'>
+                        <button onClick={handleClick}>Create one</button>
+                        <button>Delete all</button>
+                    </div>
                 </div>
-                <div className='userGig__btns'>
-                    <button onClick={handleClick}>Create one</button>
-                    <button>Delete all</button>
+                <div className='userGig__list'>
+                    {
+                        gigs.map((gig, idx: number) => {
+                            return <GigItem key={idx} data={gig} handleAlertDelete={handleOpenAlert} />
+                        })
+                    }
                 </div>
+                <Stack spacing={2} className='mt-8'>
+                    <Pagination page={curPage ? +curPage : 1} count={page} size="large" onChange={handleChangePage} />
+                </Stack>
             </div>
-            <div className='userGig__list'>
-                {
-                    data.map((gig, idx: number) => {
-                        return <GigItem key={idx} data={gig} handleAlertDelete={handleDelete} />
-                    })
-                }
-            </div>
-            <Stack spacing={2} className='mt-8'>
-                <Pagination count={page} size="large" onChange={handleChangePage} />
-            </Stack>
-        </div>
+        </React.Fragment>
     )
 }
 

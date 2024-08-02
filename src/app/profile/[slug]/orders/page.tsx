@@ -2,15 +2,18 @@ import OrderPage from '@/components/OrderPage';
 import { Metadata } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import React from 'react';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 interface Params extends ParsedUrlQuery {
     slug: string;
     id: string;
 }
 
+
+
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
     const { slug } = params;
+
 
     return {
         title: `${decodeURIComponent(slug as string)} | Orders`,

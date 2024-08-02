@@ -39,7 +39,7 @@ const OrderPage: React.FC<Props> = ({ }) => {
         <div className="page__wrapper">
             <ToastContainer />
             <div className='order__wrapper'>
-                <ProgressSection />
+                <ProgressSection label='Orders' apiSegment='hire/count-all' />
                 <div className='list__wrapper'>
                     <OrderList notifySuccess={notifySuccess} />
                 </div>

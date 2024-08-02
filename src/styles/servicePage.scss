@@ -1,0 +1,35 @@
+.service__wrapper {
+    background: #f9f9f9;
+
+    .servicePage__wrapper {
+        @apply w-[92%] mx-auto grid grid-cols-12 py-28 gap-10;
+
+        .service__progress {
+            @apply col-span-4 bg-white rounded-lg;
+        }
+
+        .service__list {
+            @apply col-span-8 bg-white rounded-lg p-4;
+
+            .services__wrapper {
+                @apply flex flex-col justify-center;
+
+                .service__info {
+                    @apply flex gap-4 items-center p-4;
+                }
+
+                .btn__done {
+                    @apply px-4 py-1 rounded-full bg-green-500 text-white font-semibold transition-all;
+
+                    &:hover {
+                        @apply bg-green-400;
+                    }
+
+                    &.unactive {
+                        @apply bg-zinc-200 text-zinc-500 cursor-not-allowed;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -66,20 +66,6 @@ async function fetchingData({ params }: { params: Params }) {
                 error: true,
             }
         }),
-        fetch('http://localhost:8080/hire/get-all-by-seller', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Credentials': 'true',
-                'Cookie': `token=${cookies().get('token')?.value}`,
-            },
-        }).then((res) => res.json()).catch((err) => {
-            return {
-                data: null,
-                error: true,
-            }
-        }),
     ]);
     return result;
 }

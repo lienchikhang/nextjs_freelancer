@@ -40,95 +40,14 @@ interface IGig {
 
 const ProfilePage: React.FC<Props> = ({ data }) => {
 
-    console.log('data in profilepaGE', data);
-
-    const [gigs, setGigs] = useState<IGig[]>([]);
-    const [isOpenAlert, setOpenAlert] = useState(false);
-    const [deletedOne, setDeletedOne] = useState(0);
-    const [totalPage, setTotalPage] = useState(0);
-    const path = usePathname();
-    const params = useSearchParams();
-    const { handleExpired } = useSession();
-    const router = useRouter();
-    const cancelRef = React.useRef(null);
-
-
-    useEffect(() => {
-        if (data[3].status == 200) {
-            setGigs(data[3].content.jobs);
-            setTotalPage(data[3].content.page)
-        }
-    }, []);
-
-    useEffect(() => {
-        if (data[3].status == 200 && params.get('page')) {
-            const page = params.get('page') as string;
-
-            if (page != '1') {
-                const fetching = async () => {
-                    const rs = await http.get(`hire/get-all-by-seller?page=${page}`);
-                    if (rs.status == 200) {
-                        setGigs(rs.content.jobs);
-                    }
-                }
-
-                fetching();
-            } else {
-                setGigs(data[3].content.jobs);
-            }
-        }
-
-    }, [params.get('page')])
-
-    const notifySuccess = (mess: string) => toast.success(mess, {
-        position: "bottom-center",
-        transition: Flip,
-    });
-
-    const handleOpenAlert = (gigId: number) => {
-        setOpenAlert(true);
-        setDeletedOne(gigId);
-    }
-
-    const handleChangePage = async (event: React.ChangeEvent<unknown>, value: number) => {
-        const isLoggedIn = await ButtonObject.checkExpired();
-
-        if (!isLoggedIn) {
-            handleExpired(true);
-            return;
-        }
-        router.push(`?page=${value}`);
-    };
-
-    const handleCloseAlert = () => {
-        setOpenAlert(false);
-    }
-
-    const handleDelete = async () => {
-        if (deletedOne) {
-            const rs = await http.patch(`job/delete/${deletedOne}`);
-
-            // console.log('rss in delete gig', rs);
-            if (rs.status == 200) {
-                notifySuccess(rs.mess);
-                //remove gig
-                const newGigs = gigs.filter((gig: IGig) => {
-                    return gig.id != deletedOne;
-                });
-
-                setGigs(newGigs);
-            }
-        }
-    }
+    console.log('data aaaa', data);
 
     if (data[0]?.error
         || data[1]?.error
         || data[2]?.error
-        || data[3]?.error
         || data[0].status == 404
         || data[1].status == 404
         || data[2].status == 404
-        || data[3].status == 404
     ) {
         return <div className="gig__wrapper">
             <h1>Something is wrong!</h1>
@@ -137,40 +56,6 @@ const ProfilePage: React.FC<Props> = ({ data }) => {
 
     return (
         <React.Fragment>
-            <ChakraProvider>
-                <AlertDialog
-                    isOpen={isOpenAlert}
-                    leastDestructiveRef={cancelRef}
-                    onClose={handleCloseAlert}
-                >
-                    <AlertDialogOverlay>
-                        <AlertDialogContent>
-                            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                                Delete Customer
-                            </AlertDialogHeader>
-
-                            <AlertDialogBody>
-                                Are you sure deleting {deletedOne}? You can't undo this action afterwards.
-                            </AlertDialogBody>
-
-                            <AlertDialogFooter>
-                                <Button ref={cancelRef} onClick={handleCloseAlert}>
-                                    Cancel
-                                </Button>
-                                <Button colorScheme='red' onClick={() => {
-                                    handleCloseAlert();
-                                    //delete
-                                    handleDelete();
-                                }} ml={3}>
-                                    Delete
-                                </Button>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialogOverlay>
-                </AlertDialog>
-                <SessionExpired />
-            </ChakraProvider>
-            <ToastContainer />
             <div className='profile__wrapper'>
                 <div className='profile__main'>
                     <div className='profile__info'>
@@ -180,8 +65,7 @@ const ProfilePage: React.FC<Props> = ({ data }) => {
                         <div className='jobList__tile'>
                             <h2>Your job</h2>
                         </div>
-                        {data[3].status == 403 && <RegisterSeller notifySuccess={notifySuccess} />}
-                        {data[3].status == 200 && <UserGig data={gigs} page={totalPage} handleDelete={handleOpenAlert} handleChangePage={handleChangePage} />}
+                        <UserGig />
                     </div>
                 </div>
             </div>

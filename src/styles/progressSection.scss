@@ -1,0 +1,11 @@
+.progress__wrapper {
+    @apply col-span-4 sticky top-24 h-[400px] bg-white rounded-lg p-6 flex flex-col justify-center items-center;
+
+    h2 {
+        @apply text-xl font-semibold mb-4;
+    }
+
+    p {
+        @apply text-lg font-medium mb-4;
+    }
+}
