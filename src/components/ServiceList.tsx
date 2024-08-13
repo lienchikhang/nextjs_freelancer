@@ -8,6 +8,10 @@ import { Avatar, Pagination, Stack } from '@mui/material';
 import { Tag } from 'antd';
 import ButtonObject from '@/libs/classes/Button';
 import { useSession } from '@/libs/contexts/session.context';
+import RegisterSeller from './RegisterSeller';
+import { Flip, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 interface IService {
     Hires: {
@@ -27,11 +31,17 @@ interface IService {
 const ServiceList = () => {
 
     const [detailService, setDetailService] = useState<IService | null>(null);
+    const [noPermission, setPermission] = useState(false);
     const router = useRouter();
     const curPath = usePathname();
     const query = useSearchParams();
     const { handleExpired } = useSession();
     const curPage = query.get('page');
+
+    const notifySuccess = (mess: string) => toast.success(mess, {
+        position: "bottom-center",
+        transition: Flip,
+    });
 
 
     useEffect(() => {
@@ -45,6 +55,8 @@ const ServiceList = () => {
 
             if (rs.status == 200) {
                 setDetailService(rs.content);
+            } else if (rs.status == 403) {
+                setPermission(true);
             } else {
                 setDetailService(null);
             }
@@ -52,6 +64,10 @@ const ServiceList = () => {
 
         fetchingData();
     }, [curPage]);
+
+    if (noPermission) {
+        return <RegisterSeller notifySuccess={notifySuccess} />
+    }
 
     if (!detailService) {
         return <h1>Something is wrong!</h1>
@@ -108,42 +124,46 @@ const ServiceList = () => {
     }
 
     return (
-        <div className='services__wrapper'>
-            <table className=' border border-gray-200 border-collapse'>
-                <thead>
-                    <tr>
-                        <th className='w-1/3 py-3 px-4 uppercase font-semibold text-sm text-start'>User</th>
-                        <th className='w-1/3 py-3 px-4 uppercase font-semibold text-sm text-start'>Status</th>
-                        <th className='w-1/3 py-3 px-4 uppercase font-semibold text-sm text-start'>Action</th>
-                    </tr>
-                </thead>
-                <tbody className="text-gray-700">
-                    {
-                        detailService.Hires.map((hire, idx: number) => {
-                            return <tr key={idx}>
-                                <td className='w-1/3 py-3 px-4 border border-gray-200'>
-                                    <div className='flex gap-4 items-center'>
-                                        {
-                                            hire.Users.avatar ? <Avatar className='item__avatar' src={hire.Users.avatar} /> : <Avatar className='item__avatar'>{hire.Users.full_name[0]}</Avatar>
-                                        }
-                                        <p className='item__name'>{hire.Users.full_name}</p>
-                                    </div>
-                                </td>
-                                <td className='w-1/3 py-3 px-4 border border-gray-200'>
+        <React.Fragment>
+            <ToastContainer />
 
-                                    <div>
-                                        {hire.isDone ? <Tag color='green'>Done</Tag> : <Tag color='red'>Not Done</Tag>}
-                                    </div>
-                                </td>
-                                <td className='w-1/3 py-3 px-4 border border-gray-200'>
-                                    <button onClick={() => handleConfirm(hire.id)} disabled={hire.isDone} className={`btn__done ${hire.isDone ? 'unactive' : 'active'}`}>Done</button>
-                                </td>
-                            </tr>
-                        })
-                    }
-                </tbody>
-            </table>
-        </div>
+            <div className='services__wrapper'>
+                <table className=' border border-gray-200 border-collapse'>
+                    <thead>
+                        <tr>
+                            <th className='w-1/3 py-3 px-4 uppercase font-semibold text-sm text-start'>User</th>
+                            <th className='w-1/3 py-3 px-4 uppercase font-semibold text-sm text-start'>Status</th>
+                            <th className='w-1/3 py-3 px-4 uppercase font-semibold text-sm text-start'>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-gray-700">
+                        {
+                            detailService.Hires.map((hire, idx: number) => {
+                                return <tr key={idx}>
+                                    <td className='w-1/3 py-3 px-4 border border-gray-200'>
+                                        <div className='flex gap-4 items-center'>
+                                            {
+                                                hire.Users.avatar ? <Avatar className='item__avatar' src={hire.Users.avatar} /> : <Avatar className='item__avatar'>{hire.Users.full_name[0]}</Avatar>
+                                            }
+                                            <p className='item__name'>{hire.Users.full_name}</p>
+                                        </div>
+                                    </td>
+                                    <td className='w-1/3 py-3 px-4 border border-gray-200'>
+
+                                        <div>
+                                            {hire.isDone ? <Tag color='green'>Done</Tag> : <Tag color='red'>Not Done</Tag>}
+                                        </div>
+                                    </td>
+                                    <td className='w-1/3 py-3 px-4 border border-gray-200'>
+                                        <button onClick={() => handleConfirm(hire.id)} disabled={hire.isDone} className={`btn__done ${hire.isDone ? 'unactive' : 'active'}`}>Done</button>
+                                    </td>
+                                </tr>
+                            })
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </React.Fragment>
     )
 }
 

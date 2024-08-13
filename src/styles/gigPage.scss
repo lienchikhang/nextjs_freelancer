@@ -55,7 +55,7 @@
         }
 
         .gig__image {
-            @apply rounded-xl mb-8;
+            @apply rounded-xl mb-8 w-full h-auto object-cover;
         }
 
         .gig__desc {
@@ -103,6 +103,44 @@
                         }
 
 
+                    }
+                }
+            }
+        }
+
+        .detailJob__addComments {
+            h2.comments__heading {
+                @apply font-semibold py-7 text-xl;
+
+            }
+
+            .addComment__btn {
+                button {
+                    @apply px-4 py-1 rounded-lg border transition-all font-medium;
+
+
+                    &:first-child {
+                        @apply bg-transparent border-red-500 text-red-500;
+
+                        &:hover {
+                            @apply bg-red-500 text-white
+                        }
+
+                        &.unactive {
+                            @apply bg-zinc-200 text-zinc-500 border-zinc-200;
+                        }
+                    }
+
+                    &:last-child {
+                        @apply bg-green-500 border-green-500 text-white;
+
+                        &:hover {
+                            @apply bg-green-400 border-green-400;
+                        }
+
+                        &.unactive {
+                            @apply bg-zinc-200 text-zinc-500 border-zinc-200;
+                        }
                     }
                 }
             }
@@ -175,9 +213,17 @@
             .tab__top {
 
                 .top__item {
-                    @apply px-6 py-4 font-bold;
+                    @apply px-6 py-4 font-bold w-full;
                     border: 1px solid #dadbdd;
                     color: #74767d;
+
+                    &.width-2 {
+                        @apply w-1/2;
+                    }
+
+                    &.width-3 {
+                        @apply w-1/3 text-sm px-4;
+                    }
                 }
 
             }

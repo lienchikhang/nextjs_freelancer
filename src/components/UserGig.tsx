@@ -73,6 +73,7 @@ const UserGig: React.FC<Props> = ({ }) => {
                 setPage(rs.content.page);
             } else if (rs.status === 403) {
                 setNotSeller(true);
+                setGigs([]);
             } else {
                 setGigs(null);
             }

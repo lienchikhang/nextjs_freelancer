@@ -1,28 +1,32 @@
+// 'use client';
 import { IComment, IGig, IService } from '@/libs/interfaces/gig.interface';
 import { StarIcon } from '@heroicons/react/16/solid';
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels, Textarea } from "@headlessui/react";
 import { Avatar, Pagination, } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import CommentItem from './CommentItem';
 import '../styles/gigPage.scss';
 import HiredDetail from './HireDetail';
 import Comments from './Comments';
 import Image from 'next/image';
 import DrawerComfirm from './DrawerConfirm';
+import RatingSection from './RatingSection';
+import LoadingModal from './LoadingModal';
+import { ToastContainer, toast } from 'react-toastify';
 
 interface Props {
     data: any[]
 }
 
 const Gig: React.FC<Props> = ({ data }) => {
-    console.log('data in gig', data);
+
 
     if (data[0]?.error
         || data[1]?.error
-        || data[2]?.error
+        // || data[2]?.error
         || data[0].status == 404
         || data[1].status == 404
-        || data[2].status == 404
+        // || data[2].status == 404
     ) {
         return <div className="gig__wrapper">
             <h1>Something is wrong!</h1>
@@ -32,10 +36,9 @@ const Gig: React.FC<Props> = ({ data }) => {
     return (
         <React.Fragment>
             <DrawerComfirm />
-            data[0]?.status == 200 && data[0]?.content &&
             <div className='gig__wrapper'>
                 <div className='gig__info'>
-                    <h1>{data[0]?.content?.job_name.replace('-', ' ')}</h1>
+                    <h1>{data[0]?.content?.job_name.replaceAll('-', ' ')}</h1>
                     <div className="star">
                         <StarIcon />
                         <div>
@@ -59,7 +62,7 @@ const Gig: React.FC<Props> = ({ data }) => {
                             <button>Contact me</button>
                         </div>
                     </div>
-                    {data[0]?.content?.job_image && <Image className='gig__image' width={550} height={450} src={data[0]?.content?.job_image} alt={data[0]?.content?.job_name} />}
+                    {data[0]?.content?.job_image && <Image className='gig__image' width={1000} height={1000} src={data[0]?.content?.job_image} alt={data[0]?.content?.job_name} />}
                     <p className="gig__desc">{data[0]?.content?.job_desc}</p>
                     <ul className="gig__user-skill">
                         {data[0]?.content?.Users?.Skills.map((skill: { skill_name: string }, idx: number) => {
@@ -68,10 +71,16 @@ const Gig: React.FC<Props> = ({ data }) => {
                             </li>
                         })}
                     </ul>
+                    <div className='detailJob__addComments'>
+                        <h2 className="comments__heading">Comment</h2>
+                        {data[0]?.content && <RatingSection
+                            gigId={data[0]?.content?.id}
+                        />}
+                    </div>
                     <div id="comment" className="detailJob__comments">
                         <h2 className="comments__heading">Reviews</h2>
                         {
-                            data[1]?.status == 200 && data[1]?.content ? <Comments data={data[1]?.content} jobId={data[0]?.content.id} /> : <div></div>
+                            <Comments data={data[1]?.content} jobId={data[0]?.content.id} /> //data[1]?.status == 200 && data[1]?.content ?
                         }
                     </div>
                 </div>
@@ -79,9 +88,9 @@ const Gig: React.FC<Props> = ({ data }) => {
                     <TabGroup className="tab__wrapper">
                         <TabList className="tab__top">
                             {
-                                data[2]?.status == 200 && data[2]?.content &&
-                                data[2]?.content.map((service: IService, idx: number) => {
-                                    return <Tab key={idx} className={`top__item ${data[2]?.content.length == 1 ? 'w-full' : `w-1/${data[2]?.content.length}`} border-0 data-[selected]:!text-green-500 data-[selected]:!border-b-green-500 data-[selected]:!border-b-2`}>
+                                data[1]?.status == 200 && data[1]?.content &&
+                                data[1]?.content.map((service: IService, idx: number) => {
+                                    return <Tab key={idx} className={`top__item ${data[1]?.content.length == 1 ? 'w-full' : `width-${data[1]?.content.length}`} border-0 data-[selected]:!text-green-500 data-[selected]:!border-b-green-500 data-[selected]:!border-b-2`}>
                                         {service.service_level}
                                     </Tab>
                                 })
@@ -89,8 +98,8 @@ const Gig: React.FC<Props> = ({ data }) => {
                         </TabList>
                         <TabPanels className="tab__bottom">
                             {
-                                data[2]?.status == 200 && data[2]?.content &&
-                                data[2]?.content.map((service: IService, idx: number) => {
+                                data[1]?.status == 200 && data[1]?.content &&
+                                data[1]?.content.map((service: IService, idx: number) => {
                                     return <TabPanel key={idx} className="bottom__item">
                                         <HiredDetail data={service} job={{
                                             image: data[0]?.content.job_image,

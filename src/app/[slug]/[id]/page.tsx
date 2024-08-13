@@ -21,9 +21,9 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 async function fetchingData({ params }: { params: Params }) {
     const result = await Promise.all([
-        http.get(`job/get/${params.id}`),
-        http.get(`comment/get/${params.id}`),
-        http.get(`service/get-by-job-id/${params.id}`),
+        await http.get(`job/get/${params.id}`),
+        // await http.get(`comment/get/${params.id}`),
+        await http.get(`service/get-by-job-id/${params.id}`),
     ]);
     console.log({ result });
     return result;

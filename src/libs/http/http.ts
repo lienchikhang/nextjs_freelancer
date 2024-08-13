@@ -11,9 +11,7 @@ const http = {
             },
 
         })
-            .then((res) => {
-                return res.json()
-            })
+            .then((res) => res.json())
             .catch((err) => {
                 console.log('err', err);
                 return {

@@ -15,19 +15,19 @@ interface Props {
 
 const Comments: React.FC<Props> = ({ data, jobId }) => {
     const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
+    // const []
     const [cmts, setCmts] = useState<any[] | null>(null);
-    const isMounted = useRef(false);
 
     useEffect(() => {
-        if (isMounted.current) {
-            const fetch = async () => {
-                const rs = await http.get(`comment/get/${jobId}?page=${page}`);
-                setCmts(rs.content.data); // Giả định rằng dữ liệu phản hồi nằm trong rs.data
-            };
-            fetch();
-        } else {
-            isMounted.current = true;
-        }
+        const fetch = async () => {
+            const rs = await http.get(`comment/get/${jobId}?page=${page}`);
+            console.log('rs in cmts', rs)
+            setCmts(rs.content?.data);
+            setTotalPage(rs.content?.page);
+            // Giả định rằng dữ liệu phản hồi nằm trong rs.data
+        };
+        fetch();
     }, [page])
 
 
@@ -35,7 +35,7 @@ const Comments: React.FC<Props> = ({ data, jobId }) => {
         setPage(value);
     }
 
-    if (!data.data.length) {
+    if (cmts && !cmts.length) {
         return <div>
             <h1>Nothing here</h1>
         </div>
@@ -44,13 +44,11 @@ const Comments: React.FC<Props> = ({ data, jobId }) => {
     return (
         <div>
             {
-                !cmts ? data.data.map((comment: IComment, idx: number) => {
-                    return <CommentItem data={comment} key={idx} />
-                }) : cmts.map((comment: IComment, idx: number) => {
+                cmts && cmts.map((comment: IComment, idx: number) => {
                     return <CommentItem data={comment} key={idx} />
                 })
             }
-            <Pagination count={data.page ? data.page : 1} variant="text" size="large" onChange={handleChangePage} />
+            <Pagination count={totalPage} variant="text" size="large" onChange={handleChangePage} />
         </div>
     )
 }

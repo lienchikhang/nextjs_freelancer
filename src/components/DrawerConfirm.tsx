@@ -48,9 +48,9 @@ const DrawerComfirm = () => {
         }
     }
 
-    if (!order) {
-        return <h1>Oops! There is something wrong here. Please try again</h1>
-    }
+    // if (!order) {
+    //     return <h1>Oops! There is something wrong here. Please try again</h1>
+    // }
 
     return (
         <SwipeableDrawer

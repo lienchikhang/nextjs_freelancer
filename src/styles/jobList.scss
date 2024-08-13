@@ -21,13 +21,13 @@
             }
 
             .jobItem__name {
-                @apply tracking-wider mb-2;
+                @apply tracking-wider mb-4;
 
                 color: #404145;
             }
 
             .jobItem__star {
-                @apply mb-2;
+                @apply my-2 flex;
             }
 
             &:hover {

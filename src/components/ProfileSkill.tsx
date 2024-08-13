@@ -8,6 +8,8 @@ interface Props {
 
 const ProfileSkill: React.FC<Props> = ({ data }) => {
 
+    console.log('data in skill', data);
+
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState('');
     const [skillList, setSkillList] = useState<any[]>(data);
@@ -34,6 +36,10 @@ const ProfileSkill: React.FC<Props> = ({ data }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value);
+    }
+
+    if (!data) {
+        return <h1>Oops! Something Wrong!</h1>
     }
 
     return (
