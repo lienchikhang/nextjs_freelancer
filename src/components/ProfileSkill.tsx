@@ -8,8 +8,6 @@ interface Props {
 
 const ProfileSkill: React.FC<Props> = ({ data }) => {
 
-    console.log('data in skill', data);
-
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState('');
     const [skillList, setSkillList] = useState<any[]>(data);

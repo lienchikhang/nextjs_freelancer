@@ -35,8 +35,8 @@ const JobItem: React.FC<Props> = ({ data }) => {
                 pathname: `/${data.job_name}/${data.id}`,
             }}>{reduceString(data.job_name, 65)}</Link>
             {/* <p className="jobItem__star">{data.stars}</p> */}
-            <Rating className="jobItem__star" name="read-only" value={data.stars} readOnly />
-            <p className="jobItem__price">
+            {/* <Rating className="jobItem__star" name="read-only" value={data.stars} readOnly /> */}
+            <p className="jobItem__price mt-4">
                 <strong>From {data.Services[0].price && data.Services[0].price.toLocaleString()}</strong>
             </p>
         </div>

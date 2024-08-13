@@ -60,7 +60,7 @@ const JobList = () => {
                     : <JobListNotFound />
             }
             <div className='jobList__pagination'>
-                {jobs && jobs.length != 0 && <Pagination page={currentPage ? +currentPage : 1} count={5} variant="text" size="large" onChange={handleChangePage} />}
+                {jobs && jobs.length != 0 && <Pagination page={currentPage ? +currentPage : 1} count={page} variant="text" size="large" onChange={handleChangePage} />}
             </div>
         </section>
     )

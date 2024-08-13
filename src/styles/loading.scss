@@ -1,9 +1,24 @@
 .loading__wrapper {
-    @apply w-screen h-screen relative mx-auto py-28 bg-green-400/55;
+    @apply w-screen h-screen flex justify-center items-center;
 
-    .loading__section {
-        h1 {
-            @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-semibold text-white;
+
+    .loading__flex {
+        @apply flex flex-col justify-center items-center gap-4;
+
+        img {
+            @apply object-contain w-[300px] h-[300px];
+        }
+
+        .loading__section {
+
+            h1 {
+                @apply text-3xl font-semibold text-center mb-4;
+            }
+
+            p {
+                @apply text-xl font-medium text-center;
+            }
         }
     }
+
 }

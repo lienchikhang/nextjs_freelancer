@@ -79,7 +79,7 @@ const CreateSection = () => {
     const [changedImage, setChangeImage] = useState(false);
     const router = useRouter();
 
-    // console.log({ options });
+    console.log({ options });
     // console.log({ types });
     // console.log({ input });
     console.log({ gigEdit });
@@ -608,13 +608,17 @@ const CreateSection = () => {
                                             return;
                                         }
                                         add();
-                                        setOption([...options, {
-                                            price: 0,
-                                            serviceDesc: "",
-                                            serviceBenefit: "",
-                                            deliveryDate: 1,
-                                            serviceLevel: (fields.length + 1 == 1) ? 'BASIC' : (fields.length + 1 == 2) ? 'ADVANCED' : 'PREMIUM'
-                                        },])
+                                        console.log('btn click after', fields.length);
+
+                                        if (fields.length != 0) {
+                                            setOption([...options, {
+                                                price: 0,
+                                                serviceDesc: "",
+                                                serviceBenefit: "",
+                                                deliveryDate: 1,
+                                                serviceLevel: (fields.length + 1 == 1) ? 'BASIC' : (fields.length + 1 == 2) ? 'ADVANCED' : 'PREMIUM'
+                                            },])
+                                        }
                                     }} block>
                                         + Add Item
                                     </Button>

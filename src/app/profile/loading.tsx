@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/loading.scss';
+import '../../styles/loading.scss';
 import Image from 'next/image';
 
 const loading = () => {
